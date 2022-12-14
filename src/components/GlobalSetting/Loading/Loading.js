@@ -9,8 +9,8 @@ export default function Loading(props) {
     if (isLoading) {
         return (
             <div className={styleLoading.bgLoading}>
-                {/* <img src='https://media0.giphy.com/media/26tPgy93ssTeTTSqA/giphy-downsized.gif' alt="loading.gif"/> */}
-                <img src='https://res.cloudinary.com/fpt-food/image/upload/v1639790730/ReactJS_Jira_Bugs_Clone/Curve-Loading_xkidcm.gif' alt="curve-loading.gif"/>
+                {<img src='https://media0.giphy.com/media/26tPgy93ssTeTTSqA/giphy-downsized.gif' alt="loading.gif"/> }
+                </* img src='https://res.cloudinary.com/fpt-food/image/upload/v1639790730/ReactJS_Jira_Bugs_Clone/Curve-Loading_xkidcm.gif' alt="curve-loading.gif"/ */>
             </div>
         )
     } else {
