@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <h2>{TASK_NAME}</h2>
+    <br>
+    <div class="row">
+        <div class="col-auto">
+            <dl class="row">
+                <dt class="col-sm-3">Автор</dt>
+                <dd class="col-sm-9">{author}</dd>
+
+                <dt class="col-sm-3">Исполнитель</dt>
+                <dd class="col-sm-9">{assignee}</dd>
+
+                <dt class="col-sm-3">Статус</dt>
+                <dd class="col-sm-9">{status}</dd>
+            </dl>
+        </div>
+        <div class="col-auto">
+            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                <button type="button" class="btn btn-primary">Редактировать задачу</button>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Перевести в статус
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Статус1</a></li>
+                        <li><a class="dropdown-item" href="#">Статус2</a></li>
+                        <li><a class="dropdown-item" href="#">Статус3</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <h4>Описание задачи</h4>
+        <dl class="row">
+            <p>{description}</p>
+        </dl>
+    </div>
+
+    <div class="row">
+        <div class="col-auto">
+            <h5>Прикреплённые файлы</h5>
+            <ol class="list-group list-group-numbered">
+                <li class="list-group-item"><a href="${FILE_SERVER_URL}" class="stretched-link text-danger">${FILE_NAME}</a></li>
+                <li class="list-group-item"><a href="${FILE_SERVER_URL}" class="stretched-link text-danger">${FILE_NAME}</a></li>
+                <li class="list-group-item"><a href="${FILE_SERVER_URL}" class="stretched-link text-danger">${FILE_NAME}</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</body>
+</html>
