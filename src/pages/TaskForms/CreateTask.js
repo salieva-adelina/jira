@@ -1,11 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 
+/**
+ * Компонент принимает:
+ * user - логин автора,
+ * projectId,
+ * serverUrl
+ * */
+
 export default function CreateTask(props) {
     const isTestingRef = useRef();
     const suitRef = useRef();
     const caseRef = useRef();
     const runRef = useRef();
+
+    // form data
+    const asigneeRef = useRef();
+    const nameRef = useRef();
+    const descriptionRef = useRef();
+    const attachmentsRef = useRef();
 
     const [projectUsers, setProjectUsers] = useState([]);
     const [suits, setSuits] = useState([]);
@@ -109,16 +122,33 @@ export default function CreateTask(props) {
         }).catch((e) => console.log(e));
     };
 
+    const handleSubmit = (e)=>{
+        e.preventDefault();
+        axios.post(`${props.serverUrl}/task/change`,{
+            isTesting: Boolean(isTestingRef.current.value),
+            projectId: props.projectId,
+            author: props.user,
+            asignee: asigneeRef.current.value,
+            name: nameRef.current.value,
+            description: descriptionRef.current.value,
+            link: link,
+            attachments: attachmentsRef.current.value,
+        }).then((res)=>{
+            if(res.data.status)
+                props.setEditing(false);
+            else
+                throw new Error(`Ошибка изменения задачи:${res.data.message}`);
+        }).catch((e)=>console.log(e));
+    }
+
     return (
         <div className="container">
             <div className="row">
                 <div className="col-auto">
-                    <form method="POST" action={`${props.serverUrl}/task/create`}>
-                        <input type="text" className="form-control d-none" value={props.projectId} readOnly={true} name="projectId"/>
-                        <input type="text" className="form-control d-none" value={props.author} readOnly={true} name="author"/>
+                    <form method="POST" action={`${props.serverUrl}/task/create`} onSubmit={(e)=>{handleSubmit(e); }}>
                         <div className="mb-3">
                             <label htmlFor="taskName" className="form-label">Название задачи</label>
-                            <input type="text" className="form-control" placeholder="Введите название" name="name"/>
+                            <input type="text" className="form-control" ref={nameRef} placeholder="Введите название" name="name"/>
                         </div>
                         <div className="form-check">
                             <input
@@ -143,7 +173,7 @@ export default function CreateTask(props) {
                             <label htmlFor="asignee" className="form-label">
                                 Выбор исполнителя
                             </label>
-                            <select className="form-select" aria-label="Default select example" name="asignee">
+                            <select className="form-select" ref={asigneeRef} aria-label="Default select example" name="asignee">
                                 {projectUsers.map((user)=>
                                     <option value={user} key={user}>{user}</option>
                                 )}
@@ -175,7 +205,6 @@ export default function CreateTask(props) {
                                     )}
                                 </select>
                             </div>
-                            <input type="text" className="form-control d-none" readOnly={true} value={link} name="link"/>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="taskDescription" className="form-label">
@@ -186,6 +215,7 @@ export default function CreateTask(props) {
                                 id="taskDescription"
                                 rows={3}
                                 name="description"
+                                ref={descriptionRef}
                                 defaultValue={""}
                             />
                         </div>
@@ -196,6 +226,7 @@ export default function CreateTask(props) {
                                 type="file"
                                 name="attachments"
                                 id="attachments"
+                                ref={attachmentsRef}
                                 multiple
                             />
                         </div>
