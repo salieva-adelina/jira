@@ -1,27 +1,23 @@
 import React, {useEffect, useState, useRef} from 'react'
 import axios from "axios";
 import AddUser from "./AddUser";
+import { SERVER_API_URL } from "../../util/config/constants"
 
 const availableRoles = ['Тестировщик', "Руководитель тестирования"];
 
-/**
- * Компонент принимает:
- * projectId,
- * serverUrl
- * */
-
 const ProjectUsers = (props) => {
+    const projectId = props.match.params.id;
     const [projectUsers, setProjectUsers] = useState([]);
     const [selectedUser, selectUser] = useState(undefined);
     const [userRoles, setUserRoles] = useState([]);
     const [isAdding, setIsAdding] = useState(false);
 
     const getProjectUsers = () => {
-        if(!props.projectId || !props.serverUrl) return;
+        if(!projectId) return;
 
         axios.post(
-            `${props.serverUrl}/projects/users`,
-            {projectId: props.projectId})
+            `${SERVER_API_URL}/projects/users`,
+            {projectId: projectId})
             .then((res)=>{
                 const users = res.data?.users ?? [];
                 setProjectUsers(users);})
@@ -30,11 +26,11 @@ const ProjectUsers = (props) => {
     };
 
     const getUserRoles = () => {
-        if(!props.projectId || !props.serverUrl || !selectedUser) return;
+        if(!projectId || !selectedUser) return;
         axios.post(
-            `${props.serverUrl}/user/roles/get`,
+            `${SERVER_API_URL}/user/roles/get`,
             {
-                projectId: props.projectId,
+                projectId: projectId,
                 userLogin: selectedUser,
             }).then((res)=>{
                 const roles = res.data?.roles ?? [];
@@ -44,11 +40,11 @@ const ProjectUsers = (props) => {
     };
 
     const changeUserRoles = () => {
-        if(!props.projectId || !props.serverUrl || !selectedUser) return;
+        if(!projectId || !selectedUser) return;
         axios.post(
-            `${props.serverUrl}/user/roles/change`,
+            `${SERVER_API_URL}/user/roles/change`,
             {
-                projectId: props.projectId,
+                projectId: projectId,
                 userLogin: selectedUser,
                 roles: userRoles ?? [],
             }).then((res)=>{
@@ -61,11 +57,11 @@ const ProjectUsers = (props) => {
     };
 
     const deleteUser = () => {
-        if(!props.projectId || !props.serverUrl || !selectedUser) return;
+        if(!projectId || !selectedUser) return;
         axios.post(
-            `${props.serverUrl}/user/dettach`,
+            `${SERVER_API_URL}/user/detach`,
             {
-                projectId: props.projectId,
+                projectId: projectId,
                 userLogin: selectedUser,
             }).then((res)=>{
                 const status = res.data?.status;
@@ -90,7 +86,7 @@ const ProjectUsers = (props) => {
 
     return (
         <div className="container">
-            {isAdding ? <AddUser projectId={props.projectId} serverUrl={props.serverUrl} setIsAdding={setIsAdding} /> :
+            {isAdding ? <AddUser projectId={projectId} setIsAdding={setIsAdding} /> :
                 <div>
                     <div className="row">
                         <div className="col-auto">

@@ -19,12 +19,12 @@ export default function Menu(props) {
                 </div>
             </div>
             <div className="control">
-                <NavLink to={`/project/board/${project?.id}`} style={{ color: '#172B4D' }} activeClassName="active font-weight-bold text-primary">
+                {/*<NavLink to={`/project/board/${project?.id}`} style={{ color: '#172B4D' }} activeClassName="active font-weight-bold text-primary">
                     <div>
                         <i className="fa fa-credit-card" />
-                        <span className="ml-2">Kanban Board</span>
+                        <span className="ml-2">Меню задач</span>
                     </div>
-                </NavLink>
+                </NavLink>*/}
                 {/* <NavLink to="/project/settings" style={{ color: '#172B4D' }} activeClassName="active font-weight-bold text-primary">
                     <div>
                         <i className="fa fa-cog" />
@@ -34,7 +34,13 @@ export default function Menu(props) {
                 <NavLink to="/project-management" style={{ color: '#172B4D' }} activeClassName="active font-weight-bold text-primary">
                     <div>
                         <i className="fa fa-cog" />
-                        <span className="ml-2">Project Management</span>
+                        <span className="ml-2">Меню проектов</span>
+                    </div>
+                </NavLink>
+                <NavLink to="/user-management" style={{ color: '#172B4D' }} activeClassName="active font-weight-bold text-primary">
+                    <div>
+                        <i className="fa fa-cog" />
+                        <span className="ml-2">Управление пользователями проекта</span>
                     </div>
                 </NavLink>
             </div >

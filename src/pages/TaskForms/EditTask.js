@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react'
 import axios from "axios";
+import { SERVER_API_URL } from "../../util/config/constants"
 import Attachments from '../../components/attachments/Attachments'
 
 export default function EditTask(props) {
@@ -15,7 +16,7 @@ export default function EditTask(props) {
         //Если задача на тестирование, подгружаем только тестировщиков
         const isTesting = props.task.type === "Testing";
         axios.post(
-            `${props.serverUrl}/projects/${isTesting ? "testers" : "users"}`,
+            `${SERVER_API_URL}/projects/${isTesting ? "testers" : "users"}`,
             {projectId: props.projectId})
             .then((res)=>{
                 const users = res.data?.users ?? [];
@@ -32,7 +33,7 @@ export default function EditTask(props) {
 
     const handleSubmit = (e)=>{
         e.preventDefault();
-        axios.post(`${props.serverUrl}/task/change`,{
+        axios.post(`${SERVER_API_URL}/task/change`,{
             taskId: props.task.id,
             projectId: props.projectId,
             status : props.task.status,
@@ -55,7 +56,7 @@ export default function EditTask(props) {
         <div className="container" >
             <div className="row">
                 <div className="col-auto">
-                    <form method="POST" action={`${props.serverUrl}/task/change`}  onSubmit={(e)=>{handleSubmit(e); }}>
+                    <form method="POST" action={`${SERVER_API_URL}/task/change`}  onSubmit={(e)=>{handleSubmit(e); }}>
                         <div className="mb-3">
                             <label htmlFor="taskName" className="form-label">
                                 Название задачи

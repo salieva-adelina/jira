@@ -1,14 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { SERVER_API_URL } from "../../util/config/constants"
 import axios from 'axios'
 
 /**
  * Компонент принимает:
  * user - логин автора,
- * projectId,
- * serverUrl
+ * projectId
  * */
 
 export default function CreateTask(props) {
+    const projectId = props.match.params.id;
     const isTestingRef = useRef();
     const suitRef = useRef();
     const caseRef = useRef();
@@ -33,8 +34,8 @@ export default function CreateTask(props) {
         //Если задача на тестирование, подгружаем только тестировщиков
         const isTesting = isTestingRef.current.value;
         axios.post(
-            `${props.serverUrl}/projects/${isTesting ? "testers" : "users"}`,
-            {"projectId":props.projectId})
+            `${SERVER_API_URL}/projects/${isTesting ? "testers" : "users"}`,
+            {"projectId": projectId})
             .then((res)=>{
                 const users = res.data?.users ?? [];
                 setProjectUsers(users);})
@@ -51,7 +52,7 @@ export default function CreateTask(props) {
             return;
         }
 
-        axios.post(`${props.serverUrl}/projects/test/suites`,{"projectId":props.projectId})
+        axios.post(`${SERVER_API_URL}/projects/test/suites`,{"projectId": projectId})
             .then((res)=>{
                 const suits = res.data?.suits ?? [];
                 setSuits(suits);})
@@ -69,8 +70,8 @@ export default function CreateTask(props) {
             return;
         }
 
-        axios.post(`${props.serverUrl}/projects/test/cases`,{
-            projectId: props.projectId,
+        axios.post(`${SERVER_API_URL}/projects/test/cases`,{
+            projectId: projectId,
             testSuit: suit
         }).then((res)=>{
             const cases = res.data?.cases ?? [];
@@ -89,8 +90,8 @@ export default function CreateTask(props) {
             return;
         }
 
-        axios.post(`${props.serverUrl}/projects/test/runs`,{
-            projectId :props.projectId,
+        axios.post(`${SERVER_API_URL}/projects/test/runs`,{
+            projectId: projectId,
             testSuit: suit,
             testCase: Case
         }).then((res)=>{
@@ -111,8 +112,8 @@ export default function CreateTask(props) {
             return;
         }
 
-        axios.post(`${props.serverUrl}/projects/test/generate`,{
-            projectId: props.projectId,
+        axios.post(`${SERVER_API_URL}/projects/test/generate`,{
+            projectId: projectId,
             testSuit: suit,
             testRun: run,
             testCase: Case
@@ -124,9 +125,9 @@ export default function CreateTask(props) {
 
     const handleSubmit = (e)=>{
         e.preventDefault();
-        axios.post(`${props.serverUrl}/task/change`,{
+        axios.post(`${SERVER_API_URL}/task/change`,{
             isTesting: Boolean(isTestingRef.current.value),
-            projectId: props.projectId,
+            projectId: projectId,
             author: props.user,
             asignee: asigneeRef.current.value,
             name: nameRef.current.value,
@@ -145,7 +146,7 @@ export default function CreateTask(props) {
         <div className="container">
             <div className="row">
                 <div className="col-auto">
-                    <form method="POST" action={`${props.serverUrl}/task/create`} onSubmit={(e)=>{handleSubmit(e); }}>
+                    <form method="POST" action={`${SERVER_API_URL}/task/create`} onSubmit={(e)=>{handleSubmit(e); }}>
                         <div className="mb-3">
                             <label htmlFor="taskName" className="form-label">Название задачи</label>
                             <input type="text" className="form-control" ref={nameRef} placeholder="Введите название" name="name"/>

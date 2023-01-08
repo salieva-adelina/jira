@@ -14,6 +14,9 @@ import EditProjectDrawer from './pages/Project/Drawer/EditProjectDrawer';
 import CreateTaskModal from './pages/Project/Modal/CreateTaskModal';
 import ViewTaskModal from './pages/Project/Modal/ViewTaskModal';
 import Account from './pages/Auth/Account';
+import ProjectUsers from './pages/UserForms/ProjectUsers';
+import CreateTask from './pages/TaskForms/CreateTask';
+import EditTask from './pages/TaskForms/EditTask';
 
 function App() {
   return (
@@ -27,7 +30,7 @@ function App() {
       <Switch>
 
         {/* AuthTemplate */}
-        < AuthTemplate exact path='/login' Component={Login} / >
+        < AuthTemplate exact path='/login' Component={Login} />
         <AuthTemplate exact path='/register' Component={Register} />
 
         {/* Jira Bugs Template */}
@@ -40,7 +43,17 @@ function App() {
         {/* Project Management */}
         <JiraBugsTemplate exact path="/account" Component={Account} title="Account" />
 
-        <AuthTemplate path='/' Component={Login} />
+          {/* User Management */}
+          <JiraBugsTemplate exact path="/project/:id/users" Component={ProjectUsers} />
+
+          {/* User Management */}
+          <JiraBugsTemplate exact path="/project/:id/task/create/" Component={CreateTask} title="Создание задачи" />
+
+          {/* User Management */}
+          <JiraBugsTemplate exact path="/project/:id/task/edit/:taskId" Component={EditTask} title="Редактирование задачи" />
+
+
+          <AuthTemplate path='/' Component={Login} />
         {/* <JiraBugsTemplate exact path="/" Component={Board} title="Kanban Board" /> */}
       </Switch>
     </Router>

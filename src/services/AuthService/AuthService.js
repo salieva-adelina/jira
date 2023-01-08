@@ -4,7 +4,7 @@ import { SERVER_API_URL } from "../../util/config/constants"
 export const authService = {
     login: (userLogin) => {
         const response = axios({
-            url: `${SERVER_API_URL}/authenticate`,
+            url: `${SERVER_API_URL}/user/login`,
             method: 'POST',
             data: userLogin,
         })
@@ -14,7 +14,7 @@ export const authService = {
 
     register: (userRegister) => {
         return axios({
-            url: `${SERVER_API_URL}/register`,
+            url: `${SERVER_API_URL}/user/register`,
             method: 'POST',
             data: userRegister,
         })

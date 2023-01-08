@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react'
 import axios from "axios";
+import { SERVER_API_URL } from "../../util/config/constants"
 
 /**
  * Страница встроена в ProjectUsers. Добавлять никуда больше не требуется.
@@ -12,10 +13,8 @@ const AddUser = (props) => {
     const userRef = useRef();
 
     const getAllUsers = () => {
-        if(!props.serverUrl) return;
-
         axios.post(
-            `${props.serverUrl}/users`)
+            `${SERVER_API_URL}/users`)
             .then((res)=>{
                 const users = res.data?.users ?? [];
                 setUsers(
@@ -29,10 +28,10 @@ const AddUser = (props) => {
 
     const addUser = () => {
         const user = userRef.current.value;
-        if(!props.serverUrl || !user) return;
+        if(!user) return;
 
         axios.post(
-            `${props.serverUrl}/user/attach`,{
+            `${SERVER_API_URL}/user/attach`,{
                 projectId: props.projectId,
                 userLogin: user,
             }).then((res)=>{

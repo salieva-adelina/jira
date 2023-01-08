@@ -5,7 +5,7 @@ const id_token = localStorage.getItem(ACCESS_TOKEN);
 export const taskService = {
     createTask: (newTask) => {
         return axios({
-            url: `${SERVER_API_URL}/task/create-task`,
+            url: `${SERVER_API_URL}/task/create`,
             method: 'POST',
             data: { ...newTask, createdBy: 'Anonymous' },
             headers: { 'authorization': 'Bearer ' + id_token }

@@ -1,13 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import EditTask from "../TaskForms/EditTask";
 import axios from "axios";
-
-/**
- * Компонент принимает:
- * taskId,
- * projectId,
- * serverUrl
- * */
+import { SERVER_API_URL } from "../../util/config/constants"
 
 //Пример данных задачи
 const taskExample = {
@@ -25,6 +19,9 @@ const taskExample = {
     ]
 };
 export default function Task(props) {
+    const projectId = props.match.params.id;
+    const taskId = props.match.params.taskId;
+
     const [isEditing, setEditing] = useState(false);
     const [task, setTask] = useState({});
 
@@ -35,11 +32,11 @@ export default function Task(props) {
     },[isEditing]);
 
     const getTask = ()=>{
-        if(!props.taskId || !props.projectId || !props.serverUrl || isEditing) return;
+        if(!taskId || !projectId || isEditing) return;
 
-        axios.post(`${props.serverUrl}/task`,{
-            taskId: props.taskId,
-            projectId: props.projectId,
+        axios.post(`${SERVER_API_URL}/task`,{
+            taskId: taskId,
+            projectId: projectId,
         })
             .then((res)=>{
                 if(res.data.status)
@@ -52,12 +49,12 @@ export default function Task(props) {
         setTask(taskExample);
     }
     const transitTask = (status)=>{
-        if(!status || !props.taskId || !props.projectId){
+        if(!status || !taskId || !projectId){
             return;
         }
-        axios.post(`${props.serverUrl}/task/transit`,{
-            taskId: props.taskId,
-            projectId: props.projectId,
+        axios.post(`${SERVER_API_URL}/task/transit`,{
+            taskId: taskId,
+            projectId: projectId,
             status : status,
         }).then((res)=>{
             if(res.data.status)
@@ -74,8 +71,7 @@ export default function Task(props) {
         <div className="container">
             {isEditing ?
                 <EditTask
-                    serverUrl={props.serverUrl}
-                    projectId={props.projectId}
+                    projectId={projectId}
                     task={task}
                     setEditing={setEditing}
                 />
