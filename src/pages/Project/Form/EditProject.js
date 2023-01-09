@@ -27,7 +27,7 @@ function EditProject(props) {
     const getAllUsers = () => {
         axios.post(
             `${SERVER_API_URL}/users`)
-            .then((res)=>{
+            .then((res) => {
                 const users = res.data?.users ?? [];
                 setUsers(users);
             }).catch((e)=>console.log(e));
@@ -92,7 +92,7 @@ function EditProject(props) {
                 <br/>
                 <div className="mb-4">
                     <label htmlFor="manager" className="form-label">
-                        Выберите пользователя из списка
+                        Выбор руководителя проекта
                     </label>
                     <select
                         className="form-select"

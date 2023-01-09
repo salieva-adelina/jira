@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { useSelector, useDispatch, connect } from 'react-redux';
 import { GET_ALL_PROJECT_CATEGORY_SAGA } from '../../../redux/constants/ProjectCategoryConst';
@@ -6,6 +6,8 @@ import { withFormik } from 'formik';
 import * as Yup from 'yup';
 import { CREATE_PROJECT_SAGA, DUPPLICATE_PROJECT_NAME } from '../../../redux/constants/ProjectConst';
 import Swal from 'sweetalert2'
+import axios from "axios";
+import {SERVER_API_URL} from "../../../util/config/constants";
 
 function ProjectSetting(props) {
 
@@ -28,6 +30,23 @@ function ProjectSetting(props) {
             return <option key={index} value={projectCategory.id}>{projectCategory.name}</option>
         });
     };
+
+    const [users, setUsers] = useState([]);
+
+    const getAllUsers = () => {
+        axios.post(
+            `${SERVER_API_URL}/users`)
+            .then((res) => {
+                const users = res.data?.users ?? [];
+                setUsers(users);
+            }).catch((e)=>console.log(e));
+        setUsers(["User1", "User2"]);
+    };
+
+    //Updating Users onLoad:
+    useEffect(()=>{
+        getAllUsers();
+    },[]);
 
     useEffect(() => {
         dispatch({
@@ -71,14 +90,25 @@ function ProjectSetting(props) {
                     <input className="form-control" name="name" placeholder="Название задачи" required="required" onChange={handleChange} />
                 </div>
                 <div className="mb-4">
-                    <label className="form-label">Выбор руководителя проекта</label>
-                    <input className="form-control" name="url" placeholder="https://github.com/quanghavan29/jira_bugs_clone_reactjs_nestjs" required="required" onChange={handleChange} />
+                    <label htmlFor="manager" className="form-label">
+                        Выбор руководителя проекта
+                    </label>
+                    <select
+                        className="form-select"
+                        aria-label="Adding user to project"
+                        name="manager"
+                        onChange={handleChange}
+                    >
+                        {users.map((user)=>
+                            <option value={user} key={user}>{user}</option>
+                        )}
+                    </select>
                 </div>
                 <div className="mb-4">
                     <label className="form-label">Описание</label>
                     <Editor
                         name="description"
-                        initialValue="<p>    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis laudantium ipsa ullam repellat deleniti dolorem, adipisci nam quisquam rerum accusantium deserunt suscipit quibusdam soluta, labore non exercitationem dignissimos quas nemo. </p>"
+                        initialValue="<p></p>"
                         init={{
                             height: 300,
                             menubar: false,
@@ -115,9 +145,8 @@ const CreateProjectWithFormik = withFormik({
     mapPropsToValues: (props) => {
         return {
             name: '',
-            url: '',
-            description: '<p>    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis laudantium ipsa ullam repellat deleniti dolorem, adipisci nam quisquam rerum accusantium deserunt suscipit quibusdam soluta, labore non exercitationem dignissimos quas nemo.</p>',
-            projectCategoryId: props.projectCategories[0]?.id,
+            manager: '',
+            description: '<p></p>',
         }
     },
     // validationSchema: Yup.object().shape({
@@ -128,10 +157,7 @@ const CreateProjectWithFormik = withFormik({
         props.dispatch({
             type: CREATE_PROJECT_SAGA,
             newProject: {
-                ...values,
-                projectCategory: {
-                    id: values.projectCategoryId,
-                }
+                ...values
             }
         });
     },
@@ -141,7 +167,6 @@ const CreateProjectWithFormik = withFormik({
 
 const mapStateToProps = (state) => {
     return {
-        projectCategories: state.ProjectCategoryReducer.projectCategories,
         dupplicateProjectName: state.ProjectReducer.dupplicateProjectName,
         message: state.ProjectReducer.message,
     }
