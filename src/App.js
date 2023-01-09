@@ -34,14 +34,14 @@ function App() {
         <AuthTemplate exact path='/register' Component={Register} />
 
         {/* Jira Bugs Template */}
-        <JiraBugsTemplate exact path="/project/board/:id" Component={Board} title="Kanban Board" />
-        <JiraBugsTemplate exact path="/project-management/settings" Component={ProjectSetting} title="Project Settings" />
+        <JiraBugsTemplate exact path="/project/board/:id" Component={Board} title="Доска задач" />
+        <JiraBugsTemplate exact path="/project-management/settings" Component={ProjectSetting} title="Настройки проекта" />
 
         {/* Project Management */}
-        <JiraBugsTemplate exact path="/project-management" Component={ProjectManagement} title="Project Management" />
+        <JiraBugsTemplate exact path="/project-management" Component={ProjectManagement} title="Управление проектом" />
 
         {/* Project Management */}
-        <JiraBugsTemplate exact path="/account" Component={Account} title="Account" />
+        <JiraBugsTemplate exact path="/account" Component={Account} title="Аккаунт" />
 
           {/* User Management */}
           <JiraBugsTemplate exact path="/project/:id/users" Component={ProjectUsers} />

@@ -26,13 +26,13 @@ export default function Header(props) {
         <Menu onClick={handleMenuClick}>
             <Menu.Item key="1" style={{ display: 'flex' }}>
                 <NavLink to="/account">
-                    <div><i className="fa fa-user"></i><span className="ml-3">Account</span></div>
+                    <div><i className="fa fa-user"></i><span className="ml-3">Аккаунт</span></div>
                 </NavLink>
             </Menu.Item>
 
             <Menu.Item key="2">
                 <NavLink to="/login">
-                    <div><i className="fa fa-sign-out-alt"></i><span className="ml-2 pl-1">Logout</span></div>
+                    <div><i className="fa fa-sign-out-alt"></i><span className="ml-2 pl-1">Выйти из системы</span></div>
                 </NavLink>
             </Menu.Item>
         </Menu>
@@ -43,8 +43,8 @@ export default function Header(props) {
             <div>
                 <nav aria-label="breadcrumb">
                     <ol className="breadcrumb" style={{ backgroundColor: 'white' }}>
-                        <li className="breadcrumb-item">Project</li>
-                        <li className="breadcrumb-item">ReactJS Jira Clone</li>
+                        <li className="breadcrumb-item">Проект</li>
+                        <li className="breadcrumb-item">УПиЗ</li>
                         <li className="breadcrumb-item active" aria-current="page">
                             {props.title}
                         </li>

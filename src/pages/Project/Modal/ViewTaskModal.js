@@ -100,8 +100,8 @@ function ViewTaskModal(props) {
                     <div className="progress-bar" role="progressbar" style={{ width: `${percent}%` }} aria-valuenow={25} aria-valuemin={Number(timeTrackingSpent)} aria-valuemax={max} />
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <p className="logged">{timeTrackingSpent}h logged</p>
-                    <p className="estimate-time">{timeTrackingRemaining}h estimated</p>
+                    <p className="logged">{timeTrackingSpent}h зарегистрирован</p>
+                    <p className="estimate-time">{timeTrackingRemaining}h Оценка</p>
                 </div>
             </div>
         </div>
@@ -128,7 +128,7 @@ function ViewTaskModal(props) {
                                 </p>
                                 {userLogin.id === comment.user.id ?
                                     <div>
-                                        <span style={{ color: '#65676B', cursor: 'pointer', fontSize: 12 }}>Edit </span>
+                                        <span style={{ color: '#65676B', cursor: 'pointer', fontSize: 12 }}>Редактировать </span>
                                         •
                                         <Popconfirm
                                             title="Are you sure to delete this comment?"
@@ -142,13 +142,13 @@ function ViewTaskModal(props) {
                                             okText="Yes"
                                             cancelText="No"
                                         >
-                                            <span style={{ color: '#65676B', cursor: 'pointer', fontSize: 12 }}> Delete</span>
+                                            <span style={{ color: '#65676B', cursor: 'pointer', fontSize: 12 }}>Удалить</span>
                                         </Popconfirm>
                                     </div> :
                                     <div>
-                                        <span style={{ color: '#65676B', cursor: 'pointer', fontSize: 12 }}>Like </span>
+                                        <span style={{ color: '#65676B', cursor: 'pointer', fontSize: 12 }}>Понравилось </span>
                                         •
-                                        <span style={{ color: '#65676B', cursor: 'pointer', fontSize: 12 }}> Response</span>
+                                        <span style={{ color: '#65676B', cursor: 'pointer', fontSize: 12 }}> Отзыв</span>
                                     </div>}
                             </div>
                         </div>
@@ -183,22 +183,21 @@ function ViewTaskModal(props) {
                                     taskUpdate: { ...task, type: value },
                                 })
                             }}>
-                                <Option value="New Task">New Task</Option>
-                                <Option value="Bugs">Bugs</Option>
+                                <Option value="New Task">Новая задача</Option>
                             </Select>
                         </div>
                         <div style={{ display: 'flex' }}>
                             <div style={{ cursor: 'pointer' }}>
                                 <i className="fab fa-telegram-plane" />
-                                <span style={{ paddingRight: 20 }}> Give feedback</span>
+                                <span style={{ paddingRight: 20 }}> Обратная связь</span>
                             </div>
                             <div style={{ cursor: 'pointer' }}>
                                 <i className="fa fa-link" />
-                                <span style={{ paddingRight: 20 }}> Copy link</span>
+                                <span style={{ paddingRight: 20 }}> Скоприровать ссылку</span>
                             </div>
                             <div style={{ cursor: 'pointer' }}>
                                 <i className="fa fa-trash-alt" />
-                                <span style={{ paddingRight: 20 }}> Delete</span>
+                                <span style={{ paddingRight: 20 }}> Удалить</span>
                             </div>
                         </div>
                     </div>
@@ -232,7 +231,7 @@ function ViewTaskModal(props) {
                                 </div>
 
                                 <div className="mt-3">
-                                    <p>Description</p>
+                                    <p>Описание</p>
                                     <Editor
                                         name="description"
                                         initialValue={task?.description}
@@ -265,12 +264,12 @@ function ViewTaskModal(props) {
                                             type: UPDATE_TASK_SAGA,
                                             taskUpdate: { ...task, description: newDescription },
                                         })
-                                    }}>Save</Button>
+                                    }}>Сохранить</Button>
                                     <Button className="ml-2" onClick={() => {
-                                    }}>Cancel</Button>
+                                    }}>Закрыть</Button>
                                 </div>
                                 <div className="comment mt-5">
-                                    <h6>Comment</h6>
+                                    <h6>Комментарий</h6>
                                     <div className="block-comment mt-4" style={{ display: 'flex' }}>
                                         <div className="avatar">
                                             {(userLogin.imageUrl === '' || userLogin.imageUrl === null) ?
@@ -310,7 +309,7 @@ function ViewTaskModal(props) {
                                                         newComment: newComment,
                                                     })
                                                     setCommentContent('');
-                                                }}>Sent</Button>
+                                                }}>Отправить</Button>
                                         </div>
                                     </div>
                                     <div className="lastest-comment mt-4">
@@ -320,21 +319,21 @@ function ViewTaskModal(props) {
                             </div>
                             <div className="col-4">
                                 <div className="status">
-                                    <h6>STATUS</h6>
+                                    <h6>Статус</h6>
                                     <Select name="status" value={task?.status} onChange={(value) => {
                                         dispatch({
                                             type: UPDATE_TASK_SAGA,
                                             taskUpdate: { ...task, status: value },
                                         })
                                     }}>
-                                        <Option value="BACKLOG">BACKLOG</Option>
-                                        <Option value="SELECTED FOR DEVELOPMENT">SELECTED FOR DEVELOPMENT</Option>
-                                        <Option value="IN PROGRESS">IN PROGRESS</Option>
-                                        <Option value="DONE">DONE</Option>
+                                        <Option value="BACKLOG">Невыполненно</Option>
+                                        <Option value="SELECTED FOR DEVELOPMENT">Выбран для разработки</Option>
+                                        <Option value="IN PROGRESS">в процессе</Option>
+                                        <Option value="DONE">Выполнено</Option>
                                     </Select>
                                 </div>
                                 <div className="reporter mt-3">
-                                    <h6>ASSIGNEES</h6>
+                                    <h6>Назначен</h6>
                                     <div>
                                         {usersAssign?.map((user, index) => {
 
@@ -358,41 +357,41 @@ function ViewTaskModal(props) {
                                         <Popover placement="topLeft" title={"Add Member"} content={content()} trigger="click">
                                             <Tag className="site-tag-plus mt-2" style={{ cursor: 'pointer' }}>
                                                 <span style={{ color: "#0052CC" }}>
-                                                    <i className="fa fa-plus" /> ADD MORE
+                                                    <i className="fa fa-plus" /> Добавить ещё
                                                 </span>
                                             </Tag>
                                         </Popover>
                                     </div>
                                 </div>
                                 <div className="reporter mt-3">
-                                    <h6>REPORTER</h6>
+                                    <h6>Отчет </h6>
                                     <div style={{ display: 'flex' }} className="item">
                                         <div className="avatar">
-                                            <img src="https://res.cloudinary.com/fpt-food/image/upload/v1639680442/FPT%20FOOD/Jira_Bugs_Clone/spiderman_z2e5kw.jpg" alt="avatar.jpg" />
+                                            <img src="https://yandex.ru/images/search?pos=1&from=tabbar&img_url=http%3A%2F%2Fpreviewsworld.com%2FSiteImage%2FFBCatalogImage%2FSTK411397.jpg&text=вася+пупкин&rpt=simage&lr=213" alt="avatar.jpg" />
                                         </div>
                                         <div className="name">
                                             <div className="ml-1 mt-1 pr-1">
-                                                Pickle Rick
+                                                Вася Пупкин
                                                 {/* <i className="fa fa-times" style={{ marginLeft: 5, cursor: 'pointer' }} /> */}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="priority" style={{ marginBottom: 20 }}>
-                                    <h6>PRIORITY</h6>
+                                    <h6>Приоритет</h6>
                                     <Select name="priority" value={task?.priority} onChange={(value) => {
                                         dispatch({
                                             type: UPDATE_TASK_SAGA,
                                             taskUpdate: { ...task, priority: value },
                                         })
                                     }}>
-                                        <Option value="High">High</Option>
-                                        <Option value="Medium">Medium</Option>
-                                        <Option value="Low">Low</Option>
+                                        <Option value="High">Высокий</Option>
+                                        <Option value="Medium">Средний</Option>
+                                        <Option value="Low">Низкий</Option>
                                     </Select>
                                 </div>
                                 <div className="estimate">
-                                    <h6>ORIGINAL ESTIMATE (HOURS)</h6>
+                                    <h6>Первоначальная оценка (HOURS)</h6>
                                     <Input type="number" name="originalEstimate" value={task?.originalEstimate} onChange={(e) => {
                                         let originalEstimate = 0;
                                         if (e.target.value !== '') {
@@ -405,11 +404,11 @@ function ViewTaskModal(props) {
                                     }} />
                                 </div>
                                 <div className="time-tracking mt-3">
-                                    <h6>TIME TRACKING</h6>
+                                    <h6>Отслеживание времени</h6>
                                     {renderTimeTracking()}
                                 </div>
-                                <div style={{ color: '#929398' }}>Create at a month ago</div>
-                                <div style={{ color: '#929398' }}>Update at a few seconds ago</div>
+                                <div style={{ color: '#929398' }}>Создан месяц назад</div>
+                                <div style={{ color: '#929398' }}>Обновление несколько секунд назад</div>
                             </div>
                         </div>
                     </div>

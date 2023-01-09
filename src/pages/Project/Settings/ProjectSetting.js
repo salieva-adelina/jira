@@ -66,25 +66,19 @@ function ProjectSetting(props) {
     return (
         <form onSubmit={handleSubmit}>
             <div style={{ width: '60%' }} className="mt-4">
-                <div className="mb-3">
-                    <label className="form-label">Name</label>
-                    <input className="form-control" name="name" placeholder="ReactJS Jira Clone" required="required" onChange={handleChange} />
+                <div className="mb-4">
+                    <label className="form-label">Название</label>
+                    <input className="form-control" name="name" placeholder="Название задачи" required="required" onChange={handleChange} />
                 </div>
-                <div className="mb-3">
-                    <label className="form-label">URL</label>
+                <div className="mb-4">
+                    <label className="form-label">Выбор руководителя проекта</label>
                     <input className="form-control" name="url" placeholder="https://github.com/quanghavan29/jira_bugs_clone_reactjs_nestjs" required="required" onChange={handleChange} />
                 </div>
-                <div className="mb-3">
-                    <label className="form-label">Category</label>
-                    <select className="form-control" name="projectCategoryId" onChange={handleChange}>
-                        {renderProjectCategories()}
-                    </select>
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Description</label>
+                <div className="mb-4">
+                    <label className="form-label">Описание</label>
                     <Editor
                         name="description"
-                        initialValue="<p>A Jira clone app built with ReactJS and NestJS - by quanghavan29.</p>"
+                        initialValue="<p>    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis laudantium ipsa ullam repellat deleniti dolorem, adipisci nam quisquam rerum accusantium deserunt suscipit quibusdam soluta, labore non exercitationem dignissimos quas nemo. </p>"
                         init={{
                             height: 300,
                             menubar: false,
@@ -103,13 +97,13 @@ function ProjectSetting(props) {
                     />
                 </div>
                 <button className="btn btn-primary" type="submit" onSubmit={handleSubmit}>
-                    Save
+                    Сохранить
                 </button>
                 <button type="button" className="btn btn-secondary ml-3"
                     onClick={() => {
                         props.history.goBack();
                     }}>
-                    Cancel
+                    Закрыть
                 </button>
             </div>
         </form>
@@ -122,7 +116,7 @@ const CreateProjectWithFormik = withFormik({
         return {
             name: '',
             url: '',
-            description: '<p>A Jira clone app built with ReactJS and NestJS - by quanghavan29.</p>',
+            description: '<p>    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis laudantium ipsa ullam repellat deleniti dolorem, adipisci nam quisquam rerum accusantium deserunt suscipit quibusdam soluta, labore non exercitationem dignissimos quas nemo.</p>',
             projectCategoryId: props.projectCategories[0]?.id,
         }
     },
@@ -142,7 +136,7 @@ const CreateProjectWithFormik = withFormik({
         });
     },
 
-    displayName: 'Jira Bugs Create Project',
+    displayName: 'УПиЗ',
 })(ProjectSetting);
 
 const mapStateToProps = (state) => {

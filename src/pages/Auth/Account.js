@@ -75,19 +75,19 @@ export default function Account(props) {
             }}>
                 <div>
                     <div className="mb-3">
-                        <label className="form-label">First name</label>
+                        <label className="form-label">Имя</label>
                         <Input type="text" name="firstName" className="form-control" value={userLogin.values.firstName} onChange={handleOnChange} />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Last name</label>
+                        <label className="form-label">Фамилия</label>
                         <Input type="text" name="lastName" className="form-control" value={userLogin.values.lastName} onChange={handleOnChange} />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Email address</label>
+                        <label className="form-label">Почта</label>
                         <Input type="email" name="email" className="form-control" value={userLogin.values.email} placeholder="email@example.com" onChange={handleOnChange} />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">New password</label>
+                        <label className="form-label">Новый пароль</label>
                         <Input type="password" name="newPassword" className="form-control" onChange={handleOnChange} />
                     </div>
                     <Button type="primary" className="mt-3" onClick={() => {
@@ -96,7 +96,7 @@ export default function Account(props) {
                             userUpdate: {...userLogin.values},
                         })
                     }}>
-                        Save
+                        Сохранить
                     </Button>
                 </div>
             </div>

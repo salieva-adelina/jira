@@ -14,8 +14,8 @@ export default function Menu(props) {
                     <img src={ReactLogo} alt="logo_reactjs.jpg" style={{ width: '100%' }} />
                 </div>
                 <div className="account-info">
-                    <p style={{ color: '#42526E', fontWeight: 'bold' }}>ReactJS Jira Clone</p>
-                    <p style={{ color: '#5E6C84' }}>Software Project</p>
+                    <p style={{ color: '#42526E', fontWeight: 'bold' }}>УПиЗ</p>
+                    <p style={{ color: '#5E6C84' }}>Программный проект</p>
                 </div>
             </div>
             <div className="control">
@@ -51,19 +51,19 @@ export default function Menu(props) {
                 </div>
                 <div className="mt-3">
                     <i className="fa fa-equals" />
-                    <span className="ml-2">Issues and filters</span>
+                    <span className="ml-2">Проблемы и фильтры</span>
                 </div>
                 <div className="mt-3">
                     <i className="fa fa-paste" />
-                    <span className="ml-2">Pages</span>
+                    <span className="ml-2">Страницы</span>
                 </div>
                 <div className="mt-3">
                     <i className="fa fa-location-arrow" />
-                    <span className="ml-2">Reports</span>
+                    <span className="ml-2">Отчеты</span>
                 </div>
                 <div className="mt-3">
                     <i className="fa fa-box" />
-                    <span className="ml-2">Components</span>
+                    <span className="ml-2">Компоненты</span>
                 </div>
             </div>
         </div >

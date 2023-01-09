@@ -123,7 +123,7 @@ export default function ProjectList(props) {
     filteredInfo = filteredInfo || {};
     const columns = [
         {
-            title: 'Name',
+            title: 'Название',
             dataIndex: 'name',
             key: 'name',
             render: (text, record, index) => {
@@ -134,7 +134,7 @@ export default function ProjectList(props) {
             ellipsis: true,
         },
         {
-            title: 'URL',
+            title: 'Руководитель проекта',
             dataIndex: 'url',
             key: 'url',
             sorter: (a, b) => a.url.length - b.url.length,
@@ -142,21 +142,7 @@ export default function ProjectList(props) {
             ellipsis: true,
         },
         {
-            title: 'Category',
-            dataIndex: 'projectCategoryName',
-            key: 'projectCategoryName',
-            filters: [
-                { text: 'Web Application', value: 'Web Application' },
-                { text: 'Mobile Application', value: 'Mobile Application' },
-            ],
-            filteredValue: filteredInfo.projectCategoryName || null,
-            onFilter: (value, record) => record.projectCategoryName.includes(value),
-            sorter: (a, b) => a.projectCategoryName.length - b.projectCategoryName.length,
-            sortOrder: sortedInfo.columnKey === 'projectCategoryName' && sortedInfo.order,
-            ellipsis: true,
-        },
-        {
-            title: 'Member',
+            title: 'Участник',
             dataIndex: 'member',
             key: 'id',
             render: (text, record, index) => {
@@ -218,30 +204,16 @@ export default function ProjectList(props) {
             }
         },
         {
-            title: 'Created Date',
+            title: 'Дата создания',
             dataIndex: 'createdDate',
             key: 'createdDate',
             sorter: (a, b) => a.createdDate.length - b.createdDate.length,
             sortOrder: sortedInfo.columnKey === 'createdDate' && sortedInfo.order,
             ellipsis: true,
         },
+       
         {
-            title: 'Created By',
-            dataIndex: 'createdBy',
-            key: 'createdBy',
-            sorter: (a, b) => a.createdBy.length - b.createdBy.length,
-            sortOrder: sortedInfo.columnKey === 'createdBy' && sortedInfo.order,
-            ellipsis: true,
-            render: (text, record, index) => {
-                return (
-                    record.createdBy === 'ADMIN' ? <Tag color="#f50" key={index}>{record.createdBy}</Tag> :
-                        record.createdBy === 'Member' ? <Tag color="#108ee9" key={index}>{record.createdBy}</Tag> :
-                            <Tag color="#1ca027" key={index}>{record.createdBy}</Tag>
-                )
-            }
-        },
-        {
-            title: 'Action',
+            title: 'Действие',
             dataIndex: '',
             key: 'id',
             render: (text, record, index) => <div style={{ display: 'flex' }}>
@@ -262,7 +234,7 @@ export default function ProjectList(props) {
                 <div>
                     <span>
                         <Popconfirm
-                            title="Are you sure to delete this project?"
+                            title="Вы хотите удалить этот проект?"
                             onConfirm={() => {
                                 dispatch({
                                     type: DELETE_PORJECT_SAGA,
@@ -270,8 +242,8 @@ export default function ProjectList(props) {
                                     createdBy: record.createdBy,
                                 })
                             }}
-                            okText="Yes"
-                            cancelText="No"
+                            okText="Да"
+                            cancelText="Нет"
                         >
                             <span className="bg-danger text-white ml-2" style={{ padding: 6, borderRadius: '3px', paddingBottom: 8, cursor: 'pointer' }}>
                                 <DeleteOutlined style={{ fontSize: 18 }} />
@@ -303,15 +275,15 @@ export default function ProjectList(props) {
         <div className="mt-5">
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
                 <Space style={{ marginBottom: 16 }}>
-                    <Button onClick={setNameSort}>Sort Name</Button>
-                    <Button onClick={clearFilters}>Clear filters</Button>
-                    <Button onClick={clearAll}>Clear filters and sorters</Button>
+                    <Button onClick={setNameSort}>Сортировать по названию</Button>
+                    <Button onClick={clearFilters}>Очистить фильтры</Button>
+                    <Button onClick={clearAll}>Очистить фильтры и сортировщики</Button>
                 </Space>
                 <Space>
                     <NavLink to="/project-management/settings">
                         <button className="btn btn-success btn-sm" type="button">
                             <i className="fa fa-plus"></i>
-                            <span style={{ marginLeft: 4 }}>Create New Project</span>
+                            <span style={{ marginLeft: 4 }}>Создать новый проект</span>
                         </button>
                     </NavLink>
                 </Space>

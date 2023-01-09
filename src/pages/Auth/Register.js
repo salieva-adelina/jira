@@ -21,28 +21,28 @@ function Register(props) {
     return (
         <form className="text-center p-5" style={{ maxWidth: 400, margin: 'auto', marginTop: 130 }} onSubmit={handleSubmit}>
             <div>
-                <h3 style={{ fontWeight: 'bold', fontSize: 35 }}>Jira Bugs Register</h3>
+                <h3 style={{ fontWeight: 'bold', fontSize: 35 }}>УПиЗ</h3>
                 <div className="d-flex mt-4" >
-                    <Input style={{ width: '100%' }} name="username" type="username" size="large" placeholder="Username" prefix={<UserOutlined />}
+                    <Input style={{ width: '100%' }} name="username" type="username" size="large" placeholder="Имя пользователя" prefix={<UserOutlined />}
                         onChange={handleChange}
                     />
                 </div>
                 <div className="d-flex text-danger">{errors.username}</div>
                 <div className="d-flex mt-3">
-                    <Input style={{ width: '100%' }} name="password" type="password" size="large" placeholder="Password" prefix={<LockOutlined />}
+                    <Input style={{ width: '100%' }} name="password" type="password" size="large" placeholder="Пароль" prefix={<LockOutlined />}
                         onChange={handleChange}
                     />
                 </div>
                 <div className="d-flex text-danger">{errors.password}</div>
                 <div className="d-flex mt-3">
-                    <Input style={{ width: '100%' }} name="rePassword" type="password" size="large" placeholder="Re-Password" prefix={<LockOutlined />}
+                    <Input style={{ width: '100%' }} name="rePassword" type="password" size="large" placeholder="Пароль ещё раз" prefix={<LockOutlined />}
                         onChange={handleChange} />
                 </div>
                 <div className="d-flex text-danger">{errors.rePassword}</div>
                 <Button htmlType="submit" size="large" style={{ width: '100%', backgroundColor: 'rgb(102,117,223)', color: '#fff', fontWeight: 'bold' }} className="mt-3">
-                    REGISTER
+                    Зарегистрироваться
                 </Button>
-                <div className="mt-3">Already have an account? <NavLink to="/login" className="mt-3">Login here</NavLink></div>
+                <div className="mt-3">Есть аккаунт? <NavLink to="/login" className="mt-3">Войти</NavLink></div>
             </div>
         </form>
     )

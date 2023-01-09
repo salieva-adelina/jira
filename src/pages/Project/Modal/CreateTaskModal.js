@@ -71,11 +71,11 @@ function CreateTaskModal(props) {
             >
                 <form className="container" onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <p>Name</p>
+                        <p>Название</p>
                         <input className="form-control" type="text" name="name" required="required" onChange={handleChange} />
                     </div>
                     <div className="form-group">
-                        <p>Project</p>
+                        <p>Проект</p>
                         <select name="projectId" className="form-control" onChange={(e) => {
                             setFieldValue('projectId', e.target.value);
                             setUsersAssign([]);
@@ -88,29 +88,28 @@ function CreateTaskModal(props) {
                         </select>
                     </div>
                     <div className="form-group">
-                        <p>Status</p>
+                        <p>Статус</p>
                         <select name="status" className="form-control" onChange={handleChange}>
-                            <option value="BACKLOG">BACKLOG</option>
-                            <option value="SELECTED FOR DEVELOPMENT">SELECTED FOR DEVELOPMENT</option>
-                            <option value="IN PROGRESS">IN PROGRESS</option>
-                            <option value="DONE">DONE</option>
+                            <option value="BACKLOG">НЕВЫПОЛНЕННЫ</option>
+                            <option value="SELECTED FOR DEVELOPMENT">ВЫБРАН ДЛЯ РАЗРАБОТКИ</option>
+                            <option value="IN PROGRESS">В ПРОЦЕССЕ</option>
+                            <option value="DONE">ВЫПОЛНЕНО</option>
                         </select>
                     </div>
                     <div className="form-group">
                         <div className="row">
                             <div className="col-6">
-                                <p>Priority</p>
+                                <p>Приоритет</p>
                                 <select name="priority" className="form-control" onChange={handleChange}>
-                                    <option value={"High"}>High</option>
-                                    <option value={"Medium"}>Medium</option>
-                                    <option value={"Low"}>Low</option>
+                                    <option value={"High"}>Высокий</option>
+                                    <option value={"Medium"}>Средний</option>
+                                    <option value={"Low"}>Низкий</option>
                                 </select>
                             </div>
                             <div className="col-6">
-                                <p>Task type</p>
+                                <p>Тип задачи</p>
                                 <select className="form-control" name="type" onChange={handleChange}>
-                                    <option value={"New Task"}>New Task</option>
-                                    <option value={"Bugs"}>Bugs</option>
+                                    <option value={"New Task"}>Новая задача</option>
                                 </select>
                             </div>
                         </div>
@@ -118,12 +117,12 @@ function CreateTaskModal(props) {
                     <div className="form-group">
                         <div className="row">
                             <div className="col-6">
-                                <p>Assignees</p>
+                                <p>Правопреемники</p>
                                 <Select
                                     mode="multiple"
                                     size={size}
                                     options={userOptions}
-                                    placeholder="Please select"
+                                    placeholder="Выберите"
                                     value={usersAssign}
                                     optionFilterProp="label"
                                     onChange={(values) => {
@@ -135,7 +134,7 @@ function CreateTaskModal(props) {
                                 </Select>
                             </div>
                             <div className="col-6">
-                                <p>Time tracking</p>
+                                <p>Отслеживание времени</p>
                                 <Slider defaultValue={30} max={Number(timeTracking.timeTrackingSpent) + Number(timeTracking.timeTrackingRemaining)} value={timeTracking.timeTrackingSpent} />
                                 <div className="row">
                                     <div className="col-6 text-left font-weight-bold">
@@ -151,7 +150,7 @@ function CreateTaskModal(props) {
                             <div className="col-6">
                                 <div className="row">
                                     <div className="col-12">
-                                        <p>Original Estimate</p>
+                                        <p>Оценка</p>
                                         <input className="form-control" type="number" name="originalEstimate" defaultValue={0} min={0} onChange={handleChange} />
                                     </div>
                                 </div>
@@ -159,7 +158,7 @@ function CreateTaskModal(props) {
                             <div className="col-6">
                                 <div className='row'>
                                     <div className="col-6">
-                                        <p>Time spent (hours)</p>
+                                        <p>Потраченное время (часы)</p>
                                         <input className="form-control" type="number" name="timeTrackingSpent" defaultValue={0} min={0} onChange={(e) => {
                                             setTimeTracking({
                                                 ...timeTracking,
@@ -169,7 +168,7 @@ function CreateTaskModal(props) {
                                         }} />
                                     </div>
                                     <div className="col-6">
-                                        <p>Time remaining (hours)</p>
+                                        <p>Оставшееся время (часы)</p>
                                         <input className="form-control" type="number" name="timeTrackingRemaining" defaultValue={0} min={0} onChange={(e) => {
                                             setTimeTracking({
                                                 ...timeTracking,
@@ -183,7 +182,7 @@ function CreateTaskModal(props) {
                         </div>
                     </div>
                     <div className="form-group">
-                        <p>Description</p>
+                        <p>Описание</p>
                         <Editor
                             init={{
                                 height: 250,
@@ -205,7 +204,7 @@ function CreateTaskModal(props) {
                         />
                     </div>
                     <div>
-                        <button type="submit" className="btn btn-primary">Save</button>
+                        <button type="submit" className="btn btn-primary">Сохранить</button>
                     </div>
                 </form>
             </Modal>
@@ -238,7 +237,7 @@ const CreateTaskWithFormik = withFormik({
         })
     },
 
-    displayName: 'Jira Bugs Create Task',
+    displayName: 'Создать задачу УПиЗ',
 })(CreateTaskModal);
 
 export default connect()(CreateTaskWithFormik);
