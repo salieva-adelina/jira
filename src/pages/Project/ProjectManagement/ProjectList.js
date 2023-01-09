@@ -127,7 +127,7 @@ export default function ProjectList(props) {
             dataIndex: 'name',
             key: 'name',
             render: (text, record, index) => {
-                return <NavLink to={`/project/board/${record.id}`} style={{ cursor: 'pointer' }}>{text}</NavLink>
+                return <NavLink to={`/project/${record.id}`} style={{ cursor: 'pointer' }}>{text}</NavLink>
             },
             sorter: (a, b) => a.name.length - b.name.length,
             sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order,
@@ -210,48 +210,6 @@ export default function ProjectList(props) {
             sorter: (a, b) => a.createdDate.length - b.createdDate.length,
             sortOrder: sortedInfo.columnKey === 'createdDate' && sortedInfo.order,
             ellipsis: true,
-        },
-       
-        {
-            title: 'Действие',
-            dataIndex: '',
-            key: 'id',
-            render: (text, record, index) => <div style={{ display: 'flex' }}>
-                <div>
-                    <span style={{ cursor: 'pointer' }} key={index}
-                        onClick={() => { showModalViewProject(record.id) }}>
-                        <EyeOutlined style={{ fontSize: 18 }} />
-                    </span>
-                </div>
-                <div>
-                    <span className="bg-primary text-white ml-3" style={{ padding: 6, borderRadius: '3px', paddingBottom: 8, cursor: 'pointer' }}
-                        onClick={() => {
-                            showEditProjectDrawer(record.id)
-                        }}>
-                        <FormOutlined style={{ fontSize: 18 }} />
-                    </span>
-                </div>
-                <div>
-                    <span>
-                        <Popconfirm
-                            title="Вы хотите удалить этот проект?"
-                            onConfirm={() => {
-                                dispatch({
-                                    type: DELETE_PORJECT_SAGA,
-                                    id: record.id,
-                                    createdBy: record.createdBy,
-                                })
-                            }}
-                            okText="Да"
-                            cancelText="Нет"
-                        >
-                            <span className="bg-danger text-white ml-2" style={{ padding: 6, borderRadius: '3px', paddingBottom: 8, cursor: 'pointer' }}>
-                                <DeleteOutlined style={{ fontSize: 18 }} />
-                            </span>
-                        </Popconfirm>
-                    </span>
-                </div>
-            </div>
         },
     ];
 

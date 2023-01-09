@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom';
 import ReactLogo from '../../../logo.svg';
 
 export default function Menu(props) {
-
     const {project} = useSelector(state => state.ProjectReducer);
 
     return (
@@ -19,28 +18,31 @@ export default function Menu(props) {
                 </div>
             </div>
             <div className="control">
-                {/*<NavLink to={`/project/board/${project?.id}`} style={{ color: '#172B4D' }} activeClassName="active font-weight-bold text-primary">
-                    <div>
-                        <i className="fa fa-credit-card" />
-                        <span className="ml-2">Меню задач</span>
-                    </div>
-                </NavLink>*/}
-                {/* <NavLink to="/project/settings" style={{ color: '#172B4D' }} activeClassName="active font-weight-bold text-primary">
-                    <div>
-                        <i className="fa fa-cog" />
-                        <span className="ml-2">Project Settings</span>
-                    </div>
-                </NavLink> */}
+                {props.projectId ? <div>
+                    <NavLink to={`/project/${props.projectId}`} style={{ color: '#172B4D' }} activeClassName="active font-weight-bold text-primary">
+                        <div>
+                            <i className="fa fa-credit-card" />
+                            <span className="ml-2">Меню задач</span>
+                        </div>
+                    </NavLink>
+                    <NavLink to={`/project/${props.projectId}/users`} style={{ color: '#172B4D' }} activeClassName="active font-weight-bold text-primary">
+                        <div>
+                            <i className="fa fa-cog" />
+                            <span className="ml-2">Управление пользователями проекта</span>
+                        </div>
+                    </NavLink>
+                    <NavLink to={`/project/${props.projectId}/settings`} style={{ color: '#172B4D' }} activeClassName="active font-weight-bold text-primary">
+                        <div>
+                            <i className="fa fa-cog" />
+                            <span className="ml-2">Настройки проекта</span>
+                        </div>
+                    </NavLink>
+                </div> :<div></div>
+                }
                 <NavLink to="/project-management" style={{ color: '#172B4D' }} activeClassName="active font-weight-bold text-primary">
                     <div>
                         <i className="fa fa-cog" />
                         <span className="ml-2">Меню проектов</span>
-                    </div>
-                </NavLink>
-                <NavLink to="/user-management" style={{ color: '#172B4D' }} activeClassName="active font-weight-bold text-primary">
-                    <div>
-                        <i className="fa fa-cog" />
-                        <span className="ml-2">Управление пользователями проекта</span>
                     </div>
                 </NavLink>
             </div >

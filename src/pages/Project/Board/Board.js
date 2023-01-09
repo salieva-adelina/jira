@@ -176,9 +176,9 @@ export default function Board(props) {
                                                                         taskId: task.id,
                                                                     })
                                                                 }}>
-                                                                <p>
+                                                                <a href={`/task/${task.id}`}>
                                                                     {task.name}
-                                                                </p>
+                                                                </a>
                                                                 <div className="block" style={{ display: 'flex' }}>
                                                                     <div className="block-right">
                                                                         <div className="avatar-group" style={{ display: 'flex' }}>

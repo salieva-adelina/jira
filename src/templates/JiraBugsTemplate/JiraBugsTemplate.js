@@ -8,14 +8,14 @@ import SideBar from '../../pages/Project/SideBar/SideBar';
 export const JiraBugsTemplate = (props) => {
     const { Component, ...restParam } = props;
     const {project} = useSelector(state => state.ProjectReducer)
-    const id = props.computedMatch.params.id || 33;
+    const id = props.computedMatch.params.id;
     return <Route path={restParam.path} render={(propsRoute) => {
         return <>
             <div className="jira">
 
                 <SideBar />
 
-                <Menu />
+                <Menu projectId={id}/>
 
                 <div className="main">
 
