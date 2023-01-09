@@ -142,66 +142,8 @@ export default function ProjectList(props) {
             ellipsis: true,
         },
         {
-            title: 'Участник',
-            dataIndex: 'member',
-            key: 'id',
-            render: (text, record, index) => {
-                return <>
-                    <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }} key={index}>
-                        {record.members.map((member, index) => {
-                            return (member.imageUrl === '' || member.imageUrl === null) ? <Avatar key={index}>{member.login.charAt(0).toUpperCase()}</Avatar> : <Avatar src={member.imageUrl} key={index} />
-                        })}
-                    </Avatar.Group>
-                    <Popover placement="topLeft" title={"Add Member"} content={content(record, index)} trigger="click">
-                        <Button type="primary" size="small" style={{ fontWeight: 'bold', fontSize: 15 }}>
-                            +
-                        </Button>
-                    </Popover>
-
-                    <Popover placement="topLeft" title={"Members"} content={() => {
-                        return <table className="table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Avatar</th>
-                                    <th>Account</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {record.members?.map((member, index) => {
-                                    return (
-                                        <tr key={index}>
-                                            <th>{member.id}</th>
-                                            <td>
-                                                {(member.imageUrl === '' || member.imageUrl === null)
-                                                    ? <Avatar key={index}>{member.login.charAt(0).toUpperCase()}</Avatar>
-                                                    : <Avatar src={member.imageUrl} key={index} />}
-                                            </td>
-                                            <td>{member.login}</td>
-                                            <td>
-                                                <Button className="ml-1" type="danger" size="small" style={{ fontWeight: 'bold', fontSize: 15 }}
-                                                    onClick={() => {
-                                                        dispatch({
-                                                            type: DELETE_MEMBER_FROM_PROJECT_SAGA,
-                                                            project: { ...record, members: record.members.filter(item => item.id !== member.id) }
-                                                        })
-                                                    }}>
-                                                    X
-                                                </Button>
-                                            </td>
-                                        </tr>
-                                    )
-                                })}
-                            </tbody>
-                        </table>
-                    }} trigger="click">
-                        <Button className="ml-1" type="danger" size="small" style={{ fontWeight: 'bold', fontSize: 15 }}>
-                            X
-                        </Button>
-                    </Popover>
-                </>
-            }
+            title: 'Признак архивации',
+            dataIndex: 'isArchive',
         },
         {
             title: 'Дата создания',
