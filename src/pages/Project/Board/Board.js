@@ -13,19 +13,19 @@ export default function Board(props) {
     let { backLog, selectedForDev, inProgress, done } = useSelector(state => state.TaskReducer.tasks);
     const taksList = [
         {
-            status: 'BACKLOG',
+            status: 'Невыполенные',
             items: backLog.items,
         },
         {
-            status: 'SELECTED FOR DEVELOPMENT',
+            status: 'Выбран для разработки',
             items: selectedForDev.items,
         },
         {
-            status: 'IN PROGRESS',
+            status: 'В процессе',
             items: inProgress.items,
         },
         {
-            status: 'DONE',
+            status: 'Выполнен',
             items: done.items,
         }
     ]
@@ -247,8 +247,6 @@ export default function Board(props) {
                         })}
                     </Avatar.Group>
                 </div>
-                <div style={{ marginLeft: 20 }} className="text ml-5">Only My Issues</div>
-                <div style={{ marginLeft: 20 }} className="text">Recently Updated</div>
             </div>
 
             <div className="content" style={{ display: 'flex' }}>
@@ -265,4 +263,5 @@ export default function Board(props) {
             </div>
         </div>
     )
+    
 }

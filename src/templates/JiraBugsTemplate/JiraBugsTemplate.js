@@ -24,8 +24,8 @@ export const JiraBugsTemplate = (props) => {
                     <h4 style={{ color: '#172B4D', fontWeight: 'bold' }} className='mt-3'>
                         {restParam.title} {(restParam.title === 'Kanban Board') ? (` - ${project?.name}`) : ''}
                     </h4>
-                    <span className="text-danger font-weight-bold">{(restParam.title === 'Kanban Board' && id === '33') ? 'Đây là project demo từ hệ thống!' : ''}</span>
-                    <p className="mb-4 text-primary font-weight-bold">{(restParam.title === 'Kanban Board' && id === '33') ? 'Bạn có thể vào mục Project Management để tạo hoặc chuyển đển project khác!' : ''}</p>
+                    <span className="text-danger font-weight-bold">{(restParam.title === 'Kanban Board' && id === '33') ? '' : ''}</span>
+                    <p className="mb-4 text-primary font-weight-bold">{(restParam.title === 'Kanban Board' && id === '33') ? '' : ''}</p>
 
                     <Component {...propsRoute} />
 
