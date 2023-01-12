@@ -23,7 +23,8 @@ export default function Board(props) {
                 'name': 'Название задачи 2',
                 'status' : 'Ожидает тестирования'
             }
-        ]
+        ];
+    const projectId = props.match.params.id; 
     let { project } = useSelector(state => state.ProjectReducer);
     const tasks = tasksExample;//useSelector(state => state.TaskReducer.tasks);
     const taksList = [
@@ -64,7 +65,6 @@ export default function Board(props) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const id = props.match.params.id;
         //dispatch({type: GET_PROJECT_BOARD_SAGA,id,});
         //dispatch({type: GET_ALL_TASKS_BY_PROJECT_SAGA,projectId: id,})
     }, [])
@@ -157,7 +157,7 @@ export default function Board(props) {
                                                                         taskId: task.id,
                                                                     })
                                                                 }}>
-                                                                <a href={`/task/${task.id}`}>
+                                                                <a href={`${projectId}/task/${task.id}`}>
                                                                     {task.name}
                                                                 </a>
                                                                 <div className="block" style={{ display: 'flex' }}>
