@@ -1,15 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { SERVER_API_URL } from "../../util/config/constants"
 import axios from 'axios'
-
-/**
- * Компонент принимает:
- * user - логин автора,
- * projectId
- * */
+import { getCookie } from '../../util/libs/cookie';
 
 export default function CreateTask(props) {
     const projectId = props.match.params.id;
+    const user = getCookie('login');
     const isTestingRef = useRef();
     const suitRef = useRef();
     const caseRef = useRef();
@@ -128,7 +124,7 @@ export default function CreateTask(props) {
         axios.post(`${SERVER_API_URL}/task/change`,{
             isTesting: Boolean(isTestingRef.current.value),
             projectId: projectId,
-            author: props.user,
+            author: user,
             asignee: asigneeRef.current.value,
             name: nameRef.current.value,
             description: descriptionRef.current.value,

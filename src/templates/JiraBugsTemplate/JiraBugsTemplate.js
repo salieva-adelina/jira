@@ -4,18 +4,20 @@ import { Route } from 'react-router-dom';
 import Header from '../../pages/Project/Header/Header';
 import Menu from '../../pages/Project/Menu/Menu';
 import SideBar from '../../pages/Project/SideBar/SideBar';
+import { getCookie } from '../../util/libs/cookie';
 
 export const JiraBugsTemplate = (props) => {
     const { Component, ...restParam } = props;
-    const {project} = useSelector(state => state.ProjectReducer)
+    const { project } = useSelector(state => state.ProjectReducer)
     const id = props.computedMatch.params.id;
+    const isRoot = getCookie('isRoot') ?? false;
     return <Route path={restParam.path} render={(propsRoute) => {
         return <>
             <div className="jira">
 
                 <SideBar />
 
-                <Menu projectId={id}/>
+                <Menu projectId={id} isRoot={isRoot} />
 
                 <div className="main">
 

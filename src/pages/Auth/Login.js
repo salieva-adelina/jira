@@ -6,6 +6,7 @@ import { withFormik } from 'formik';
 import * as Yup from 'yup';
 import { connect } from 'react-redux';
 import { loginAction } from '../../redux/actions/AuthAction/LoginAction';
+import { setCookie } from '../../util/libs/cookie';
 
 
 function Login(props) {
@@ -61,6 +62,9 @@ const LoginWithFormik = withFormik({
         let { username, password } = values;
         setSubmitting(true);
         props.dispatch(loginAction(username, password));
+        //TODO: Переделать обработку!
+        setCookie('isRoot', true);
+        setCookie('login', 'userLogin');
     },
 
     displayName: 'УПиЗ',

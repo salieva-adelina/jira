@@ -3,7 +3,7 @@ import { Avatar, Dropdown, Menu } from 'antd';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { USER_LOGIN_LOCAL_STORAGE } from '../../../util/config/constants';
-
+import { deleteCookie, setCookie } from '../../../util/libs/cookie';
 export default function Header(props) {
 
     // const handleButtonClick = (e) => {
@@ -31,7 +31,10 @@ export default function Header(props) {
             </Menu.Item>
 
             <Menu.Item key="2">
-                <NavLink to="/login">
+                <NavLink to="/login" onClick={() => {
+                    deleteCookie('isRoot');
+                    deleteCookie('login');
+                }}>
                     <div><i className="fa fa-sign-out-alt"></i><span className="ml-2 pl-1">Выйти из системы</span></div>
                 </NavLink>
             </Menu.Item>

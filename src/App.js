@@ -18,8 +18,11 @@ import ProjectUsers from './pages/UserForms/ProjectUsers';
 import CreateTask from './pages/TaskForms/CreateTask';
 import Task from "./pages/Task/Task";
 import EditProject from "./pages/Project/Form/EditProject";
+import { setCookie } from './util/libs/cookie';
 
 function App() {
+  //setCookie('isRoot', true);
+  //setCookie('login', 'userLogin');
   return (
     <Router history={history}>
       <Loading />

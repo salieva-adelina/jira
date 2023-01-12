@@ -6,10 +6,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { ADD_MEMBER_TO_PROJECT_SAGA, DELETE_MEMBER_FROM_PROJECT_SAGA, DELETE_PORJECT_SAGA, GET_ALL_PROJECTS_SAGA, GET_PROJECT_DETAIL_SAGA } from '../../../redux/constants/ProjectConst';
 import { SEARCH_USER_SAGA } from '../../../redux/constants/UserConst';
 import dateFormat, { masks } from "dateformat";
-
-
+import { getCookie } from '../../../util/libs/cookie';
 
 export default function ProjectList(props) {
+    const isRoot = getCookie('isRoot');
     const projectExample =[{
         id: "31231241",
         manager: "user1",
@@ -80,57 +80,6 @@ export default function ProjectList(props) {
         });
     };
 
-    // const text = <span>Title</span>;
-    const content = (record, index) => {
-        // console.log('record: ', record);
-        return (
-            <div>
-                <AutoComplete
-                    value={usernameSearch}
-                    onChange={(value) => {
-                        setUsernameSearch(value);
-                    }}
-                    options={
-                        // usersSearched?.map((user, index) => {
-                        //     return { label: user.login, value: user.id, key: index }
-                        // })
-
-                        usersSearched?.filter(user => {
-                            let index = record.members.findIndex(member => member.id === user.id);
-                            if (index !== -1) {
-                                return false;
-                            }
-                            return true;
-                        }).map((user, index) => {
-                            return { label: user.login, value: user.id, key: index }
-                        })
-                    }
-                    style={{ width: '100%' }}
-                    onSelect={(value, option) => {
-                        setUsernameSearch(option.label);
-                        dispatch({
-                            type: ADD_MEMBER_TO_PROJECT_SAGA,
-                            project: { ...record, members: [...record.members, { id: value }] },
-                        })
-                    }}
-                    onSearch={(value) => {
-                        if (searchRef.current) {
-                            clearTimeout(searchRef.current);
-                        }
-                        searchRef.current = setTimeout(() => {
-                            dispatch({
-                                type: SEARCH_USER_SAGA,
-                                username: value,
-                            })
-                        }, 300)
-                    }}
-                    placeholder="Username"
-                />
-            </div>
-        )
-    };
-
-
     let { sortedInfo, filteredInfo } = state;
     sortedInfo = sortedInfo || {};
     filteredInfo = filteredInfo || {};
@@ -192,6 +141,7 @@ export default function ProjectList(props) {
                     <Button onClick={clearFilters}>Очистить фильтры</Button>
                     <Button onClick={clearAll}>Очистить фильтры и сортировщики</Button>
                 </Space>
+                { isRoot ?
                 <Space>
                     <NavLink to="/project-management/settings">
                         <button className="btn btn-success btn-sm" type="button">
@@ -200,6 +150,7 @@ export default function ProjectList(props) {
                         </button>
                     </NavLink>
                 </Space>
+                :<div></div>}
             </div>
             <Table columns={columns} rowKey={"id"} dataSource={dataConvert} onChange={handleChange} />
         </div>
