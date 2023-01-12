@@ -1,11 +1,11 @@
 import { Avatar } from 'antd';
+import { NavLink } from 'react-router-dom';
 import React, { useEffect } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import { GET_PROJECT_BOARD_SAGA } from '../../../redux/constants/ProjectConst';
 import { GET_ALL_TASKS_BY_PROJECT_SAGA, GET_TASK_DETAIL_SAGA, UPDATE_TASK_SAGA, UPDATE_TASK_STATUS_SAGA } from '../../../redux/constants/TaskConst';
-// import Content from './Content'
-// import Infor from './Infor'
+
 
 export default function Board(props) {
     const tasksExample = [
@@ -114,8 +114,9 @@ export default function Board(props) {
         dispatch({
             type: UPDATE_TASK_STATUS_SAGA,
             taskUpdate,
-        })
+        })          
     }
+   
 
     const renderCardTaskList = () => {
         return <DragDropContext onDragEnd={handleDragEnd}>
@@ -161,34 +162,7 @@ export default function Board(props) {
                                                                     {task.name}
                                                                 </a>
                                                                 <div className="block" style={{ display: 'flex' }}>
-                                                                    <div className="block-right">
-                                                                        <div className="avatar-group" style={{ display: 'flex' }}>
-                                                                            <div className="avatar-block">
-                                                                                <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }} key={index}>
-                                                                                    {task.usersAssign?.map((member, index) => {
-                                                                                        return (member.imageUrl === '' || member.imageUrl === null) ? <Avatar key={index}>{member.login.charAt(0).toUpperCase()}</Avatar> : <Avatar src={member.imageUrl} key={index} />
-                                                                                    })}
-                                                                                </Avatar.Group>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                                                        <div style={{ width: 24, height: 24, lineHeight: '34px' }}>
-                                                                            <div style={{ cursor: 'pointer' }}>
-                                                                                <i className="fa fa-bookmark" style={{ fontSize: 18 }} />
-                                                                            </div>
-                                                                        </div>
-                                                                        <div style={{ width: 24, height: 24, lineHeight: '34px' }}>
-                                                                            <div style={{ cursor: 'pointer' }}>
-                                                                                <i className="fa fa-check-square" style={{ fontSize: 18 }} />
-                                                                            </div>
-                                                                        </div>
-                                                                        <div style={{ width: 24, height: 24, lineHeight: '34px' }}>
-                                                                            <div style={{ cursor: 'pointer' }}>
-                                                                                <i className="fa fa-arrow-up" style={{ fontSize: 18 }} />
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
+                                                                  
                                                                 </div>
                                                             </li>
                                                         )
@@ -210,23 +184,27 @@ export default function Board(props) {
 
     return (
         <div>
+            <div className='button_link' style={{ display: 'flex', justifyContent: 'end'}}>
+              <NavLink to={`${projectId}/task/create`}>
+                 <button className="btn btn-success btn-sm" type="button">
+                 <i className="fa fa-plus"> Создать задачу</i>
+                 </button>
+               </NavLink>   
+             </div>
+                   
             {/* <Infor />
             <Content /> */}
             
 
             <div className="content" style={{ display: 'flex' }}>
-
                 {renderCardTaskList()}
-                {/* {renderAllTaskByStatus(backLog)}
-
-                {renderAllTaskByStatus(selectedForDev)}
-
-                {renderAllTaskByStatus(inProgress)}
-
-                {renderAllTaskByStatus(done)} */}
-
             </div>
+                    
+                
         </div>
+
+      
     )
+ 
     
 }

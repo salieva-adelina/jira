@@ -7,6 +7,8 @@ import { ADD_MEMBER_TO_PROJECT_SAGA, DELETE_MEMBER_FROM_PROJECT_SAGA, DELETE_POR
 import { SEARCH_USER_SAGA } from '../../../redux/constants/UserConst';
 import dateFormat, { masks } from "dateformat";
 
+
+
 export default function ProjectList(props) {
     const projectExample =[{
         id: "31231241",
@@ -22,7 +24,7 @@ export default function ProjectList(props) {
         name: 'Название2',
         description : 'Описание2',
         createdDate: '2020-02-03',
-        isArchive: true
+        isArchive: false
     }];
     let projects = projectExample;// useSelector(state => state.ProjectReducer.projects);
     const usersSearched = useSelector(state => state.UserReducer.usersSearched);
@@ -203,4 +205,5 @@ export default function ProjectList(props) {
         </div>
     )
 
+    
 }
