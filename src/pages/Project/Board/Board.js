@@ -8,25 +8,56 @@ import { GET_ALL_TASKS_BY_PROJECT_SAGA, GET_TASK_DETAIL_SAGA, UPDATE_TASK_SAGA, 
 // import Infor from './Infor'
 
 export default function Board(props) {
-
+    const tasksExample = [
+            {
+                'id': 31231241,
+                'author': 'user1',
+                'asignee': 'user2',
+                'name': 'Название задачи',
+                'status' : 'Новая задача'
+            },
+            {
+                'id': 123123,
+                'author': 'user3',
+                'asignee': 'user4',
+                'name': 'Название задачи 2',
+                'status' : 'Ожидает тестирования'
+            }
+        ]
     let { project } = useSelector(state => state.ProjectReducer);
-    let { backLog, selectedForDev, inProgress, done } = useSelector(state => state.TaskReducer.tasks);
+    const tasks = tasksExample;//useSelector(state => state.TaskReducer.tasks);
     const taksList = [
         {
-            status: 'Невыполенные',
-            items: backLog.items,
+            status: 'Новая задача',
+            items: tasks.filter((item)=>item.status==='Новая задача'),
         },
         {
-            status: 'Выбран для разработки',
-            items: selectedForDev.items,
+            status: 'Задача назначена',
+            items: tasks.filter((item)=>item.status==='Задача назначена'),
         },
         {
-            status: 'В процессе',
-            items: inProgress.items,
+            status: 'Задача в работе',
+            items: tasks.filter((item)=>item.status==='Задача в работе'),
         },
         {
-            status: 'Выполнен',
-            items: done.items,
+            status: 'Ожидает тестирования',
+            items: tasks.filter((item)=>item.status==='Ожидает тестирования'),
+        },
+        {
+            status: 'Задача на тестировании',
+            items: tasks.filter((item)=>item.status==='Задача на тестировании'),
+        },
+        {
+            status: 'Задача нуждается в исправлении',
+            items: tasks.filter((item)=>item.status==='Задача нуждается в исправлении'),
+        },
+        {
+            status: 'Задача отклонена',
+            items: tasks.filter((item)=>item.status==='Задача отклонена'),
+        },
+        {
+            status: 'Задача выполнена',
+            items: tasks.filter((item)=>item.status==='Задача выполнена'),
         }
     ]
 
@@ -34,14 +65,8 @@ export default function Board(props) {
 
     useEffect(() => {
         const id = props.match.params.id;
-        dispatch({
-            type: GET_PROJECT_BOARD_SAGA,
-            id,
-        });
-        dispatch({
-            type: GET_ALL_TASKS_BY_PROJECT_SAGA,
-            projectId: id,
-        })
+        //dispatch({type: GET_PROJECT_BOARD_SAGA,id,});
+        //dispatch({type: GET_ALL_TASKS_BY_PROJECT_SAGA,projectId: id,})
     }, [])
 
     // const renderUsersAssign = (usersAssign) => {
@@ -51,51 +76,7 @@ export default function Board(props) {
 
     // }
 
-    const renderAllTask = (tasks) => {
-        return tasks.map((task, index) => {
-            return <li className="list-group-item" data-toggle="modal" data-target="#infoModal" style={{ cursor: 'pointer' }} key={index}
-                onClick={() => {
-                    dispatch({
-                        type: GET_TASK_DETAIL_SAGA,
-                        taskId: task.id,
-                    })
-                }}>
-                <p>
-                    {task.name}
-                </p>
-                <div className="block" style={{ display: 'flex' }}>
-                    <div className="block-right">
-                        <div className="avatar-group" style={{ display: 'flex' }}>
-                            <div className="avatar-block">
-                                <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }} key={index}>
-                                    {task.usersAssign?.map((member, index) => {
-                                        return (member.imageUrl === '' || member.imageUrl === null) ? <Avatar key={index}>{member.login.charAt(0).toUpperCase()}</Avatar> : <Avatar src={member.imageUrl} key={index} />
-                                    })}
-                                </Avatar.Group>
-                            </div>
-                        </div>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <div style={{ width: 24, height: 24, lineHeight: '34px' }}>
-                            <div style={{ cursor: 'pointer' }}>
-                                <i className="fa fa-bookmark" style={{ fontSize: 18 }} />
-                            </div>
-                        </div>
-                        <div style={{ width: 24, height: 24, lineHeight: '34px' }}>
-                            <div style={{ cursor: 'pointer' }}>
-                                <i className="fa fa-check-square" style={{ fontSize: 18 }} />
-                            </div>
-                        </div>
-                        <div style={{ width: 24, height: 24, lineHeight: '34px' }}>
-                            <div style={{ cursor: 'pointer' }}>
-                                <i className="fa fa-arrow-up" style={{ fontSize: 18 }} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        });
-    }
+    
 
     // const renderAllTaskByStatus = (task) => {
     //     return (
@@ -231,23 +212,7 @@ export default function Board(props) {
         <div>
             {/* <Infor />
             <Content /> */}
-            <div className="info" style={{ display: 'flex' }}>
-                <div className="search-block">
-                    <input className="search mt-1" />
-                    <i className="fa fa-search mt-2" />
-                </div>
-                <div className="avatar-group" style={{ display: 'flex' }}>
-                    <Avatar.Group
-                        maxCount={4}
-                        size="large"
-                        maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
-                    >
-                        {project.members?.map((member, index) => {
-                            return (member.imageUrl === '' || member.imageUrl === null) ? <Avatar key={index}>{member.login.charAt(0).toUpperCase()}</Avatar> : <Avatar src={member.imageUrl} key={index} />
-                        })}
-                    </Avatar.Group>
-                </div>
-            </div>
+            
 
             <div className="content" style={{ display: 'flex' }}>
 

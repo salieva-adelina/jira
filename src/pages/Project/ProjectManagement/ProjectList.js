@@ -8,15 +8,29 @@ import { SEARCH_USER_SAGA } from '../../../redux/constants/UserConst';
 import dateFormat, { masks } from "dateformat";
 
 export default function ProjectList(props) {
-
-    const projects = useSelector(state => state.ProjectReducer.projects);
+    const projectExample =[{
+        id: "31231241",
+        manager: "user1",
+        name: 'Название1',
+        description : 'Описание1',
+        createdDate: '2020-02-02',
+        isArchive: false
+    },
+    {
+        id: "31231242",
+        manager: "user2",
+        name: 'Название2',
+        description : 'Описание2',
+        createdDate: '2020-02-03',
+        isArchive: true
+    }];
+    let projects = projectExample;// useSelector(state => state.ProjectReducer.projects);
     const usersSearched = useSelector(state => state.UserReducer.usersSearched);
     const [usernameSearch, setUsernameSearch] = useState('');
 
     let dataConvert = projects.map((item, index) => {
         return {
             ...item,
-            projectCategoryName: item.projectCategory.name,
             createdDate: dateFormat(new Date(item.createdDate), "mmm d, yyyy"),
         }
     })
@@ -24,11 +38,8 @@ export default function ProjectList(props) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch({
-            type: GET_ALL_PROJECTS_SAGA,
-        })
+        //dispatch({            type: GET_ALL_PROJECTS_SAGA,        })
         return () => {
-
         }
     }, [])
 
@@ -135,10 +146,10 @@ export default function ProjectList(props) {
         },
         {
             title: 'Руководитель проекта',
-            dataIndex: 'url',
-            key: 'url',
+            dataIndex: 'manager',
+            key: 'manager',
             sorter: (a, b) => a.url.length - b.url.length,
-            sortOrder: sortedInfo.columnKey === 'url' && sortedInfo.order,
+            sortOrder: sortedInfo.columnKey === 'manager' && sortedInfo.order,
             ellipsis: true,
         },
         {
@@ -191,4 +202,5 @@ export default function ProjectList(props) {
             <Table columns={columns} rowKey={"id"} dataSource={dataConvert} onChange={handleChange} />
         </div>
     )
+
 }
