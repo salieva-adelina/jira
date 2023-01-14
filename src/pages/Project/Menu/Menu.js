@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useEffect, useState, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import ReactLogo from '../../../logo.svg';
@@ -6,20 +7,20 @@ import { getCookie } from '../../../util/libs/cookie';
 
 export default function Menu(props) {
     const isRoot = getCookie('isRoot');
+    const userLogin = getCookie('login');
     const [isManager, setManager] = useState(false);
 
     const getUserRoles = () => {
         if (!props.projectId) return;
 
-        fetch(`${SERVER_API_URL}/user/roles/get`, {
-            method: "POST",
-            body: JSON.stringify({
+        axios.post(`${SERVER_API_URL}/user/roles/get`,
+            JSON.stringify({
                 projectId: props.projectId,
-                userLogin: props.userLogin,
+                userLogin: userLogin,
             }),
-            headers: commonHeaders
-        }).then((res) => res.json()).then((res) => {
-            const roles = res.roles ?? [];
+            commonHeaders
+        ).then((res) => {
+            const roles = res.data?.roles ?? [];
             setManager(roles.includes('Руководитель проекта'));
         }).catch((e) => console.log(e));
         //setManager(true);

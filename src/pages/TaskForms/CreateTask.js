@@ -30,14 +30,13 @@ export default function CreateTask(props) {
         //Если задача на тестирование, подгружаем только тестировщиков
         const isTesting = isTestingRef.current.value;
 
-        fetch(`${SERVER_API_URL}/projects/${isTesting ? "testers" : "users"}`, {
-            method: "POST",
-            body: JSON.stringify({
+        axios.post(`${SERVER_API_URL}/projects/${isTesting ? "testers" : "users"}`,
+            JSON.stringify({
                 "projectId": projectId
             }),
-            headers: commonHeaders
-        }).then((res) => res.json()).then((res) => {
-            const users = res.users ?? [];
+            commonHeaders
+        ).then((res) => {
+            const users = res.data?.users ?? [];
             setProjectUsers(users);
         }).catch((e) => console.log(e));
         //setProjectUsers(["User1", "User2"])
@@ -52,14 +51,13 @@ export default function CreateTask(props) {
             return;
         }
 
-        fetch(`${SERVER_API_URL}/projects/test/suites`, {
-            method: "POST",
-            body: JSON.stringify({
+        axios.post(`${SERVER_API_URL}/projects/test/suites`,
+            JSON.stringify({
                 "projectId": projectId
             }),
-            headers: commonHeaders
-        }).then((res) => res.json()).then((res) => {
-            const suits = res.suits ?? [];
+            commonHeaders
+        ).then((res) => {
+            const suits = res.data?.suits ?? [];
             setSuits(suits);
         }).catch((e) => console.log(e));
         //setSuits(["1", "2"])
@@ -75,15 +73,14 @@ export default function CreateTask(props) {
             return;
         }
 
-        fetch(`${SERVER_API_URL}/projects/test/cases`, {
-            method: "POST",
-            body: JSON.stringify({
+        axios.post(`${SERVER_API_URL}/projects/test/cases`,
+            JSON.stringify({
                 projectId: projectId,
                 testSuit: suit
             }),
-            headers: commonHeaders
-        }).then((res) => res.json()).then((res) => {
-            const cases = res.cases ?? [];
+            commonHeaders
+        ).then((res) => {
+            const cases = res.data?.cases ?? [];
             setCases(cases);
         }).catch((e) => console.log(e));
         //setCases(["1", "2"]);
@@ -99,16 +96,15 @@ export default function CreateTask(props) {
             return;
         }
 
-        fetch(`${SERVER_API_URL}/projects/test/runs`, {
-            method: "POST",
-            body: JSON.stringify({
+        axios.post(`${SERVER_API_URL}/projects/test/runs`,
+            JSON.stringify({
                 projectId: projectId,
                 testSuit: suit,
                 testCase: Case
             }),
-            headers: commonHeaders
-        }).then((res) => res.json()).then((res) => {
-            const runs = res.runs ?? [];
+            commonHeaders
+        ).then((res) => {
+            const runs = res.data?.runs ?? [];
             setRuns(runs);
         }).catch((e) => console.log(e));
         //setRuns(["1", "2"]);
@@ -125,16 +121,15 @@ export default function CreateTask(props) {
             return;
         }
 
-        fetch(`${SERVER_API_URL}/projects/test/generate`, {
-            method: "POST",
-            body: JSON.stringify({
+        axios.post(`${SERVER_API_URL}/projects/test/generate`,
+            JSON.stringify({
                 projectId: projectId,
                 testSuit: suit,
                 testRun: run,
                 testCase: Case
             }),
-            headers: commonHeaders
-        }).then((res) => res.json()).then((res) => {
+            commonHeaders
+        ).then((res) => {
             const url = res.url ?? "";
             setLink(url);
         }).catch((e) => console.log(e));
@@ -142,9 +137,8 @@ export default function CreateTask(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch(`${SERVER_API_URL}/task/change`, {
-            method: "POST",
-            body: JSON.stringify({
+        axios.post(`${SERVER_API_URL}/task/create`,
+            JSON.stringify({
                 isTesting: Boolean(isTestingRef.current.value),
                 projectId: projectId,
                 author: user,
@@ -154,12 +148,12 @@ export default function CreateTask(props) {
                 link: link,
                 attachments: attachmentsRef.current.value,
             }),
-            headers: commonHeaders
-        }).then((res) => res.json()).then((res) => {
-            if (res.status)
+            commonHeaders
+        ).then((res) => {
+            if (res.data?.status)
                 props.setEditing(false);
             else
-                throw new Error(`Ошибка изменения задачи:${res.message}`);
+                throw new Error(`Ошибка изменения задачи:${res.data?.message}`);
         }).catch((e) => console.log(e));
     }
 

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { useSelector, useDispatch, connect } from 'react-redux';
 import { withFormik } from 'formik';
@@ -6,10 +6,10 @@ import * as Yup from 'yup';
 import { CREATE_PROJECT_SAGA, DUPPLICATE_PROJECT_NAME } from '../../../redux/constants/ProjectConst';
 import Swal from 'sweetalert2'
 import axios from "axios";
-import {SERVER_API_URL} from "../../../util/config/constants";
+import { SERVER_API_URL } from "../../../util/config/constants";
 
 function EditProject(props) {
-
+    const projectId = props.match.params.id;
     const {
         // errors,
         handleChange,
@@ -30,14 +30,14 @@ function EditProject(props) {
             .then((res) => {
                 const users = res.data?.users ?? [];
                 setUsers(users);
-            }).catch((e)=>console.log(e));
-        setUsers(["User1", "User2"]);
+            }).catch((e) => console.log(e));
+        //setUsers(["User1", "User2"]);
     };
 
     //Updating Users onLoad:
-    useEffect(()=>{
+    useEffect(() => {
         getAllUsers();
-    },[]);
+    }, []);
 
     useEffect(() => {
         if (props.dupplicateProjectName === 'true') {
@@ -89,7 +89,7 @@ function EditProject(props) {
                     />
                     <label className="form-check-label" htmlFor="isArchive">Архивный проект</label>
                 </div>
-                <br/>
+                <br />
                 <div className="mb-4">
                     <label htmlFor="manager" className="form-label">
                         Выбор руководителя проекта
@@ -100,7 +100,7 @@ function EditProject(props) {
                         name="manager"
                         onChange={handleChange}
                     >
-                        {users.map((user)=>
+                        {users.map((user) =>
                             <option value={user} key={user}>{user}</option>
                         )}
                     </select>
@@ -131,9 +131,9 @@ function EditProject(props) {
                     Сохранить
                 </button>
                 <button type="button" className="btn btn-secondary ml-3"
-                        onClick={() => {
-                            props.history.goBack();
-                        }}>
+                    onClick={() => {
+                        props.history.goBack();
+                    }}>
                     Закрыть
                 </button>
             </div>
@@ -145,6 +145,7 @@ const CreateProjectWithFormik = withFormik({
     enableReinitialize: true,
     mapPropsToValues: (props) => {
         return {
+            id: props.match?.params?.id,
             name: '',
             manager: '',
             description: '',
@@ -155,13 +156,13 @@ const CreateProjectWithFormik = withFormik({
     // }),
 
     handleSubmit: (values, { setSubmitting, props }) => {
-        setSubmitting(true);
-        props.dispatch({
-            type: CREATE_PROJECT_SAGA,
-            newProject: {
+        setSubmitting(false);
+        axios.post(
+            `${SERVER_API_URL}/projects/change`,
+            JSON.stringify({
                 ...values,
-            }
-        });
+            })
+        ).catch((e) => console.log(e));
     },
 
     displayName: 'УПиЗ',

@@ -55,7 +55,7 @@ const ProjectUsers = (props) => {
         ).then((res) => {
             const status = res.data?.status;
             if (!status) {
-                throw new Error(`Ошибка изменения ролей пользователя:${res.data.message}`);
+                throw new Error(`Ошибка изменения ролей пользователя:${res.data?.message}`);
             }
         }).catch((e) => console.log(e));
     };

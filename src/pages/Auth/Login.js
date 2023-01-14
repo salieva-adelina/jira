@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import { connect } from 'react-redux';
 import { deleteCookie, setCookie } from '../../util/libs/cookie';
 import { commonHeaders, SERVER_API_URL } from "../../util/config/constants"
+import axios from 'axios';
 
 function Login(props) {
 
@@ -60,25 +61,24 @@ const LoginWithFormik = withFormik({
     handleSubmit: (values, { setSubmitting, props }) => {
         let { username, password } = values;
         setSubmitting(false);
-        fetch(`${SERVER_API_URL}/user/login`, {
-            method: "POST",
-            body: JSON.stringify({
+        axios.post(
+            `${SERVER_API_URL}/user/login`,
+            JSON.stringify({
                 username: username,
                 password: password,
             }),
-            headers: commonHeaders
-        }).then((res) => res.json())
-            .then((res) => {
-                const status = res.status;
-                if (status) {
-                    setCookie('login', username);
-                    setCookie('isRoot', res.isRoot);
+            commonHeaders
+        ).then((res) => {
+            const status = res.data.status;
+            if (status) {
+                setCookie('login', username);
+                setCookie('isRoot', res.data.isRoot);
 
-                } else {
-                    deleteCookie('isRoot');
-                    deleteCookie('login');
-                }
-            }).catch((e) => console.log(e));
+            } else {
+                deleteCookie('isRoot');
+                deleteCookie('login');
+            }
+        }).catch((e) => console.log(e));
     },
 
     displayName: 'УПиЗ',

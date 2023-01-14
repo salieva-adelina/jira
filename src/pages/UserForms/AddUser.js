@@ -13,17 +13,15 @@ const AddUser = (props) => {
     const userRef = useRef();
 
     const getAllUsers = () => {
-        fetch(`${SERVER_API_URL}/users`, {
-            method: "POST",
-            headers: commonHeaders
-        }).then((res) => res.json()).then((res) => {
-            const users = res.users ?? [];
-            setUsers(
-                users.filter((user) =>
-                    !props.projectUsers?.includes(user)
+        axios.post(`${SERVER_API_URL}/users`)
+            .then((res) => {
+                const users = res.data?.users ?? [];
+                setUsers(
+                    users.filter((user) =>
+                        !props.projectUsers?.includes(user)
+                    )
                 )
-            )
-        }).catch((e) => console.log(e));
+            }).catch((e) => console.log(e));
         //setUsers(["User1", "User2"]);
     };
 

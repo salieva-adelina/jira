@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import EditTask from "../TaskForms/EditTask";
 import { commonHeaders, SERVER_API_URL } from "../../util/config/constants"
+import axios from 'axios';
 
 //Пример данных задачи
 const taskExample = {
@@ -33,15 +34,14 @@ export default function Task(props) {
     const getTask = () => {
         if (!taskId || !projectId || isEditing) return;
 
-        fetch(`${SERVER_API_URL}/task`, {
-            method: "POST",
-            body: JSON.stringify({
+        axios.post(`${SERVER_API_URL}/task`,
+            JSON.stringify({
                 taskId: taskId,
                 projectId: projectId,
             }),
-            headers: commonHeaders
-        }).then((res) => res.json()).then((res) => {
-            setTask(res);
+            commonHeaders
+        ).then((res) => {
+            setTask(res.data ?? []);
         }).catch((e) => console.log(e));
         // Для дебага
         //setTask(taskExample);
@@ -51,19 +51,20 @@ export default function Task(props) {
             return;
         }
 
-        fetch(`${SERVER_API_URL}/task/transit`, {
-            method: "POST",
-            body: JSON.stringify({
+        axios.post(`${SERVER_API_URL}/task/transit`,
+            JSON.stringify({
                 taskId: taskId,
                 projectId: projectId,
                 status: status,
             }),
-            headers: commonHeaders
-        }).then((res) => res.json()).then((res) => {
-            setTask({
-                ...task,
-                status: status
-            });
+            commonHeaders
+        ).then((res) => {
+            if (res.data.status) {
+                setTask({
+                    ...task,
+                    status: status
+                });
+            }
         }).catch((e) => console.log(e));
     }
 

@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import React, { useEffect, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { commonHeaders, SERVER_API_URL } from "../../../util/config/constants"
+import axios from 'axios';
 
 
 export default function Board(props) {
@@ -30,14 +31,13 @@ export default function Board(props) {
         if (!projectId) {
             return;
         }
-        fetch(`${SERVER_API_URL}/tasks`, {
-            method: "POST",
-            body: JSON.stringify({
+        axios.post(`${SERVER_API_URL}/tasks`,
+            JSON.stringify({
                 projectId: projectId,
             }),
-            headers: commonHeaders
-        }).then((res) => res.json()).then((res) => {
-            const tasksNew = res.tasks;
+            commonHeaders
+        ).then((res) => {
+            const tasksNew = res.data?.tasks ?? [];
             setTasks(tasksNew);
         }).catch((e) => console.log(e));
         //setTasks(tasksExample);
@@ -93,21 +93,19 @@ export default function Board(props) {
             return;
         }
 
-        fetch(`${SERVER_API_URL}/task/transit`, {
-            method: "POST",
-            body: JSON.stringify({
+        axios.post(`${SERVER_API_URL}/task/transit`,
+            JSON.stringify({
                 taskId: taskId,
                 projectId: projectId,
                 status: status,
             }),
-            headers: commonHeaders
-        }).then((res) => res.json())
-            .then((res) => {
-                if (res.status)
-                    getTasks();
-                else
-                    throw new Error(`Ошибка перевода статуса задачи:${res.message}`);
-            }).catch((e) => console.log(e));
+            commonHeaders
+        ).then((res) => {
+            if (res.data.status)
+                getTasks();
+            else
+                throw new Error(`Ошибка перевода статуса задачи:${res.data.message}`);
+        }).catch((e) => console.log(e));
     }
 
     const handleDragEnd = (result) => {

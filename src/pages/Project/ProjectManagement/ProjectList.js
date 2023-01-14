@@ -34,7 +34,7 @@ export default function ProjectList(props) {
     const usersSearched = useSelector(state => state.UserReducer.usersSearched);
     const [usernameSearch, setUsernameSearch] = useState('');
 
-    let dataConvert = projects.map((item, index) => {
+    let dataConvert = projects?.map((item, index) => {
         return {
             ...item,
             createdDate: dateFormat(new Date(item.createdDate), "mmm d, yyyy"),
@@ -47,14 +47,13 @@ export default function ProjectList(props) {
             return;
         };
 
-        fetch(`${SERVER_API_URL}/projects`, {
-            method: "POST",
-            body: JSON.stringify({
+        axios.post(`${SERVER_API_URL}/projects`,
+            JSON.stringify({
                 userLogin: userLogin,
             }),
-            headers: commonHeaders
-        }).then((res) => res.json()).then((res) => {
-            const projectList = res?.projects;
+            commonHeaders
+        ).then((res) => {
+            const projectList = res.data?.projects;
             setProjects(projectList);
         }).catch((e) => console.log(e));
     };

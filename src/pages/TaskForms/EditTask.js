@@ -16,14 +16,13 @@ export default function EditTask(props) {
         //Если задача на тестирование, подгружаем только тестировщиков
         const isTesting = props.task.type === "Testing";
 
-        fetch(`${SERVER_API_URL}/projects/${isTesting ? "testers" : "users"}`, {
-            method: "POST",
-            body: JSON.stringify({
+        axios.post(`${SERVER_API_URL}/projects/${isTesting ? "testers" : "users"}`,
+            JSON.stringify({
                 projectId: props.projectId
             }),
-            headers: commonHeaders
-        }).then((res) => res.json()).then((res) => {
-            const users = res.users ?? [];
+            commonHeaders
+        ).then((res) => {
+            const users = res.data?.users ?? [];
             setProjectUsers(users);
         }).catch((e) => console.log(e));
         //setProjectUsers(["User1", "User2"])
@@ -38,9 +37,8 @@ export default function EditTask(props) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        fetch(`${SERVER_API_URL}/task/change`, {
-            method: "POST",
-            body: JSON.stringify({
+        axios.post(`${SERVER_API_URL}/task/change`,
+            JSON.stringify({
                 taskId: props.task.id,
                 projectId: props.projectId,
                 status: props.task.status,
@@ -50,9 +48,9 @@ export default function EditTask(props) {
                 attachmentsOld: attachmentsOld,
                 attachmentsNew: attachmentsNewRef.current.value,
             }),
-            headers: commonHeaders
-        }).then((res) => res.json()).then((res) => {
-            if (res.status)
+            commonHeaders
+        ).then((res) => {
+            if (res.data.status)
                 props.setEditing(false);
             else
                 throw new Error(`Ошибка изменения задачи:${res.data.message}`);

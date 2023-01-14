@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import { CREATE_PROJECT_SAGA, DUPPLICATE_PROJECT_NAME } from '../../../redux/constants/ProjectConst';
 import Swal from 'sweetalert2'
 import { commonHeaders, SERVER_API_URL } from "../../../util/config/constants";
+import axios from 'axios';
 
 function ProjectSetting(props) {
 
@@ -24,11 +25,10 @@ function ProjectSetting(props) {
     const [users, setUsers] = useState([]);
 
     const getAllUsers = () => {
-        fetch(`${SERVER_API_URL}/users`, {
-            method: "POST",
-            headers: commonHeaders
-        }).then((res) => res.json()).then((res) => {
-            const users = res?.users ?? [];
+        axios.post(`${SERVER_API_URL}/users`, {},
+            commonHeaders
+        ).then((res) => {
+            const users = res.data?.users ?? [];
             setUsers(users);
         }).catch((e) => console.log(e));
         //setUsers(["User1", "User2"]);
