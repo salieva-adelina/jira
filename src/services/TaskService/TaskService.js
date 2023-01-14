@@ -7,23 +7,7 @@ export const taskService = {
         return axios({
             url: `${SERVER_API_URL}/task/create`,
             method: 'POST',
-            data: { ...newTask, createdBy: 'Anonymous' },
-            headers: { 'authorization': 'Bearer ' + id_token }
-        })
-    },
-
-    getAllTasksByProject: (projectId, status) => {
-        return axios({
-            url: `${SERVER_API_URL}/task/get-all-by-project?projectId=${projectId}&status=${status}`,
-            method: 'GET',
-            headers: { 'authorization': 'Bearer ' + id_token }
-        })
-    },
-
-    getTaskDetail: (taskId) => {
-        return axios({
-            url: `${SERVER_API_URL}/task/get-task-detail?id=${taskId}`,
-            method: 'GET',
+            data: { ...newTask},
             headers: { 'authorization': 'Bearer ' + id_token }
         })
     },
@@ -31,7 +15,7 @@ export const taskService = {
     updateTask: (taskUpdate) => {
         return axios({
             url: `${SERVER_API_URL}/task/update`,
-            method: 'PUT',
+            method: 'POST',
             data: taskUpdate,
             headers: { 'authorization': 'Bearer ' + id_token }
         })

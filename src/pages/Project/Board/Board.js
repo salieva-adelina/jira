@@ -1,106 +1,116 @@
 import { Avatar } from 'antd';
 import { NavLink } from 'react-router-dom';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import { useDispatch, useSelector } from 'react-redux';
-import { GET_PROJECT_BOARD_SAGA } from '../../../redux/constants/ProjectConst';
-import { GET_ALL_TASKS_BY_PROJECT_SAGA, GET_TASK_DETAIL_SAGA, UPDATE_TASK_SAGA, UPDATE_TASK_STATUS_SAGA } from '../../../redux/constants/TaskConst';
+import axios from "axios"
+import { SERVER_API_URL } from "../../../util/config/constants"
 
 
 export default function Board(props) {
     const tasksExample = [
+        {
+            'id': 31231241,
+            'author': 'user1',
+            'asignee': 'user2',
+            'name': 'Название задачи',
+            'status': 'Новая задача'
+        },
+        {
+            'id': 123123,
+            'author': 'user3',
+            'asignee': 'user4',
+            'name': 'Название задачи 2',
+            'status': 'Ожидает тестирования'
+        }
+    ];
+    const projectId = props.match.params.id;
+    const [tasks, setTasks] = useState([]);
+    const [taksList, setTaskList] = useState([]);
+
+    const getTasks = () => {
+        if (!projectId) {
+            return;
+        }
+        axios.post(`${SERVER_API_URL}/tasks`, {
+            projectId: projectId,
+        }).then((res) => {
+            const tasksNew = res.data?.tasks;
+            setTasks(tasksNew);
+        }).catch((e) => console.log(e));
+        setTasks(tasksExample);
+    }
+
+    const updateTaskList = (tasks) => {
+        setTaskList([
             {
-                'id': 31231241,
-                'author': 'user1',
-                'asignee': 'user2',
-                'name': 'Название задачи',
-                'status' : 'Новая задача'
+                status: 'Новая задача',
+                items: tasks.filter((item) => item.status === 'Новая задача'),
             },
             {
-                'id': 123123,
-                'author': 'user3',
-                'asignee': 'user4',
-                'name': 'Название задачи 2',
-                'status' : 'Ожидает тестирования'
+                status: 'Задача назначена',
+                items: tasks.filter((item) => item.status === 'Задача назначена'),
+            },
+            {
+                status: 'Задача в работе',
+                items: tasks.filter((item) => item.status === 'Задача в работе'),
+            },
+            {
+                status: 'Ожидает тестирования',
+                items: tasks.filter((item) => item.status === 'Ожидает тестирования'),
+            },
+            {
+                status: 'Задача на тестировании',
+                items: tasks.filter((item) => item.status === 'Задача на тестировании'),
+            },
+            {
+                status: 'Задача нуждается в исправлении',
+                items: tasks.filter((item) => item.status === 'Задача нуждается в исправлении'),
+            },
+            {
+                status: 'Задача отклонена',
+                items: tasks.filter((item) => item.status === 'Задача отклонена'),
+            },
+            {
+                status: 'Задача выполнена',
+                items: tasks.filter((item) => item.status === 'Задача выполнена'),
             }
-        ];
-    const projectId = props.match.params.id; 
-    let { project } = useSelector(state => state.ProjectReducer);
-    const tasks = tasksExample;//useSelector(state => state.TaskReducer.tasks);
-    const taksList = [
-        {
-            status: 'Новая задача',
-            items: tasks.filter((item)=>item.status==='Новая задача'),
-        },
-        {
-            status: 'Задача назначена',
-            items: tasks.filter((item)=>item.status==='Задача назначена'),
-        },
-        {
-            status: 'Задача в работе',
-            items: tasks.filter((item)=>item.status==='Задача в работе'),
-        },
-        {
-            status: 'Ожидает тестирования',
-            items: tasks.filter((item)=>item.status==='Ожидает тестирования'),
-        },
-        {
-            status: 'Задача на тестировании',
-            items: tasks.filter((item)=>item.status==='Задача на тестировании'),
-        },
-        {
-            status: 'Задача нуждается в исправлении',
-            items: tasks.filter((item)=>item.status==='Задача нуждается в исправлении'),
-        },
-        {
-            status: 'Задача отклонена',
-            items: tasks.filter((item)=>item.status==='Задача отклонена'),
-        },
-        {
-            status: 'Задача выполнена',
-            items: tasks.filter((item)=>item.status==='Задача выполнена'),
-        }
-    ]
-
-    const dispatch = useDispatch();
+        ]);
+    };
 
     useEffect(() => {
-        //dispatch({type: GET_PROJECT_BOARD_SAGA,id,});
-        //dispatch({type: GET_ALL_TASKS_BY_PROJECT_SAGA,projectId: id,})
+        getTasks();
     }, [])
 
-    // const renderUsersAssign = (usersAssign) => {
-    //     return usersAssign.map((user, index) => {
-    //         return 
-    //     })
+    useEffect(() => {
+        updateTaskList(tasks);
+    }, [tasks])
 
-    // }
-
-    
-
-    // const renderAllTaskByStatus = (task) => {
-    //     return (
-    //         <div className="card" style={{ width: '17rem', height: 'auto', paddingBottom: 10 }}>
-    //             <div className="card-header">
-    //                 {task.status} <span>{task.items.length}</span>
-    //             </div>
-    //             <ul className="list-group list-group-flush">
-    //                 {renderAllTask(task.items)}
-    //             </ul>
-    //         </div>
-    //     )
-    // }
+    const transitTask = (taskId, status) => {
+        if (!status || !taskId || !projectId) {
+            return;
+        }
+        axios.post(`${SERVER_API_URL}/task/transit`, {
+            taskId: taskId,
+            projectId: projectId,
+            status: status,
+        }).then((res) => {
+            if (res.data.status)
+                getTasks();
+            else
+                throw new Error(`Ошибка перевода статуса задачи:${res.data.message}`);
+        }).catch((e) => console.log(e));
+    }
 
     const handleDragEnd = (result) => {
-        let {source, destination, draggableId} = result;
+        let { source, destination, draggableId } = result;
 
         if (!result.destination) {
-            return ;
+            return;
         }
-        if(source.index === destination.index && source.droppableId === destination.droppableId) {
-            return ;
+        if (source.index === destination.index && source.droppableId === destination.droppableId) {
+            return;
         }
-        
+
         // let taskIdUpdate = draggableId;
         // let statusUpdate = destination.droppableId;
 
@@ -111,12 +121,9 @@ export default function Board(props) {
 
         console.log(taskUpdate);
 
-        dispatch({
-            type: UPDATE_TASK_STATUS_SAGA,
-            taskUpdate,
-        })          
+        transitTask(Number(draggableId), destination.droppableId)
     }
-   
+
 
     const renderCardTaskList = () => {
         return <DragDropContext onDragEnd={handleDragEnd}>
@@ -152,17 +159,12 @@ export default function Board(props) {
                                                                 className="list-group-item"
                                                                 data-toggle="modal"
                                                                 data-target="#infoModal"
-                                                                onClick={() => {
-                                                                    dispatch({
-                                                                        type: GET_TASK_DETAIL_SAGA,
-                                                                        taskId: task.id,
-                                                                    })
-                                                                }}>
+                                                            >
                                                                 <a href={`${projectId}/task/${task.id}`}>
                                                                     {task.name}
                                                                 </a>
                                                                 <div className="block" style={{ display: 'flex' }}>
-                                                                  
+
                                                                 </div>
                                                             </li>
                                                         )
@@ -184,27 +186,20 @@ export default function Board(props) {
 
     return (
         <div>
-            <div className='button_link' style={{ display: 'flex', justifyContent: 'end'}}>
-              <NavLink to={`${projectId}/task/create`}>
-                 <button className="btn btn-success btn-sm" type="button">
-                 <i className="fa fa-plus"> Создать задачу</i>
-                 </button>
-               </NavLink>   
-             </div>
-                   
+            <div className='button_link' style={{ display: 'flex', justifyContent: 'end' }}>
+                <NavLink to={`${projectId}/task/create`}>
+                    <button className="btn btn-success btn-sm" type="button">
+                        <i className="fa fa-plus"> Создать задачу</i>
+                    </button>
+                </NavLink>
+            </div>
+
             {/* <Infor />
             <Content /> */}
-            
 
             <div className="content" style={{ display: 'flex' }}>
                 {renderCardTaskList()}
             </div>
-                    
-                
         </div>
-
-      
     )
- 
-    
 }

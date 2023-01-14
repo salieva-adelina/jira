@@ -21,15 +21,7 @@ function ProjectSetting(props) {
         // handleBlur,
     } = props;
 
-    const { projectCategories } = useSelector(state => state.ProjectCategoryReducer);
-
     const dispatch = useDispatch();
-
-    const renderProjectCategories = () => {
-        return projectCategories.map((projectCategory, index) => {
-            return <option key={index} value={projectCategory.id}>{projectCategory.name}</option>
-        });
-    };
 
     const [users, setUsers] = useState([]);
 
@@ -49,9 +41,6 @@ function ProjectSetting(props) {
     },[]);
 
     useEffect(() => {
-        dispatch({
-            type: GET_ALL_PROJECT_CATEGORY_SAGA,
-        });
         if (props.dupplicateProjectName === 'true') {
             Swal.fire({
                 icon: 'error',
@@ -157,7 +146,8 @@ const CreateProjectWithFormik = withFormik({
         props.dispatch({
             type: CREATE_PROJECT_SAGA,
             newProject: {
-                ...values
+                ...values,
+                isArchive: false
             }
         });
     },

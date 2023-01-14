@@ -3,18 +3,21 @@ import { Table, Button, Space, Tag, Avatar, Popconfirm, Popover, AutoComplete } 
 import { NavLink } from 'react-router-dom';
 import { FormOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
-import { ADD_MEMBER_TO_PROJECT_SAGA, DELETE_MEMBER_FROM_PROJECT_SAGA, DELETE_PORJECT_SAGA, GET_ALL_PROJECTS_SAGA, GET_PROJECT_DETAIL_SAGA } from '../../../redux/constants/ProjectConst';
-import { SEARCH_USER_SAGA } from '../../../redux/constants/UserConst';
 import dateFormat, { masks } from "dateformat";
 import { getCookie } from '../../../util/libs/cookie';
+import axios from "axios"
+import { SERVER_API_URL } from "../../../util/config/constants"
+
 
 export default function ProjectList(props) {
     const isRoot = getCookie('isRoot');
-    const projectExample =[{
+    const userLogin = getCookie('login');
+
+    const projectExample = [{
         id: "31231241",
         manager: "user1",
         name: 'Название1',
-        description : 'Описание1',
+        description: 'Описание1',
         createdDate: '2020-02-02',
         isArchive: false
     },
@@ -22,11 +25,12 @@ export default function ProjectList(props) {
         id: "31231242",
         manager: "user2",
         name: 'Название2',
-        description : 'Описание2',
+        description: 'Описание2',
         createdDate: '2020-02-03',
         isArchive: false
     }];
-    let projects = projectExample;// useSelector(state => state.ProjectReducer.projects);
+    const [projects, setProjects] = useState([]);
+
     const usersSearched = useSelector(state => state.UserReducer.usersSearched);
     const [usernameSearch, setUsernameSearch] = useState('');
 
@@ -37,10 +41,22 @@ export default function ProjectList(props) {
         }
     })
 
-    const dispatch = useDispatch();
+    const getAllProjects = () => {
+        setProjects(projectExample);
+        if (!userLogin) {
+            return;
+        };
+        axios.post(
+            `${SERVER_API_URL}/projects`, {
+            userLogin: userLogin,
+        }).then((res) => {
+            const projectList = res.data?.projects;
+            setProjects(projectList);
+        }).catch((e) => console.log(e));
+    };
 
     useEffect(() => {
-        //dispatch({            type: GET_ALL_PROJECTS_SAGA,        })
+        getAllProjects();
         return () => {
         }
     }, [])
@@ -117,22 +133,6 @@ export default function ProjectList(props) {
         },
     ];
 
-    const showModalViewProject = (id) => {
-        dispatch({
-            type: GET_PROJECT_DETAIL_SAGA,
-            actionDispatch: 'VIEW_PROJECT',
-            id,
-        })
-    };
-
-    const showEditProjectDrawer = (id) => {
-        dispatch({
-            type: GET_PROJECT_DETAIL_SAGA,
-            actionDispatch: 'EDIT_PROJECT',
-            id,
-        })
-    };
-
     return (
         <div className="mt-5">
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
@@ -141,20 +141,20 @@ export default function ProjectList(props) {
                     <Button onClick={clearFilters}>Очистить фильтры</Button>
                     <Button onClick={clearAll}>Очистить фильтры и сортировщики</Button>
                 </Space>
-                { isRoot ?
-                <Space>
-                    <NavLink to="/project-management/settings">
-                        <button className="btn btn-success btn-sm" type="button">
-                            <i className="fa fa-plus"></i>
-                            <span style={{ marginLeft: 4 }}>Создать новый проект</span>
-                        </button>
-                    </NavLink>
-                </Space>
-                :<div></div>}
+                {isRoot ?
+                    <Space>
+                        <NavLink to="/project-management/settings">
+                            <button className="btn btn-success btn-sm" type="button">
+                                <i className="fa fa-plus"></i>
+                                <span style={{ marginLeft: 4 }}>Создать новый проект</span>
+                            </button>
+                        </NavLink>
+                    </Space>
+                    : <div></div>}
             </div>
             <Table columns={columns} rowKey={"id"} dataSource={dataConvert} onChange={handleChange} />
         </div>
     )
 
-    
+
 }
