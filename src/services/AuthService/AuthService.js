@@ -13,11 +13,9 @@ export const authService = {
     },
 
     register: (userRegister) => {
-        return axios({
-            url: `${SERVER_API_URL}/user/register`,
-            method: 'POST',
-            headers: commonHeaders,
-            data: userRegister,
-        })
+        return axios.post(`${SERVER_API_URL}/user/register`,
+            JSON.stringify(userRegister),
+            commonHeaders
+        )
     }
 }

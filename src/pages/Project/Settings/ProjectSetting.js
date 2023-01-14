@@ -75,7 +75,7 @@ function ProjectSetting(props) {
             <div style={{ width: '60%' }} className="mt-4">
                 <div className="mb-4">
                     <label className="form-label">Название</label>
-                    <input className="form-control" name="name" placeholder="Название задачи" required="required" onChange={handleChange} />
+                    <input className="form-control" name="name" placeholder="Название проекта" required="required" onChange={handleChange} />
                 </div>
                 <div className="mb-4">
                     <label htmlFor="manager" className="form-label">
@@ -134,6 +134,7 @@ const CreateProjectWithFormik = withFormik({
         return {
             name: '',
             manager: '',
+            isArchive: false,
             description: '<p></p>',
         }
     },
@@ -141,14 +142,14 @@ const CreateProjectWithFormik = withFormik({
     // }),
 
     handleSubmit: (values, { setSubmitting, props }) => {
-        setSubmitting(true);
-        props.dispatch({
-            type: CREATE_PROJECT_SAGA,
-            newProject: {
+        setSubmitting(false);
+        axios.post(
+            `${SERVER_API_URL}/projects/create`,
+            JSON.stringify({
                 ...values,
-                isArchive: false
-            }
-        });
+            }),
+            commonHeaders
+        ).catch((e) => console.log(e))
     },
 
     displayName: 'УПиЗ',

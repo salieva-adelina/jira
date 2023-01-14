@@ -6,7 +6,8 @@ import { withFormik } from 'formik';
 import * as Yup from 'yup';
 import { connect } from 'react-redux';
 import { REGISTER_SAGA } from '../../redux/constants/AuthConst';
-
+import axios from 'axios';
+import { commonHeaders, SERVER_API_URL } from '../../util/config/constants';
 function Register(props) {
 
     const {
@@ -68,14 +69,15 @@ const RegisterWithFormik = withFormik({
 
     handleSubmit: (values, { setSubmitting, props }) => {
         let { username, password } = values;
-        setSubmitting(true);
-        props.dispatch({
-            type: REGISTER_SAGA,
-            userRegister: {
+        setSubmitting(false);
+        axios.post(
+            `${SERVER_API_URL}/projects/create`,
+            JSON.stringify({
                 login: username,
                 password: password,
-            }
-        })
+            }),
+            commonHeaders
+        ).catch((e) => console.log(e))
     },
 
     displayName: 'Jira Bugs Register',
