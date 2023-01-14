@@ -2,8 +2,7 @@ import { Avatar } from 'antd';
 import { NavLink } from 'react-router-dom';
 import React, { useEffect, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import axios from "axios"
-import { SERVER_API_URL } from "../../../util/config/constants"
+import { commonHeaders, SERVER_API_URL } from "../../../util/config/constants"
 
 
 export default function Board(props) {
@@ -31,13 +30,17 @@ export default function Board(props) {
         if (!projectId) {
             return;
         }
-        axios.post(`${SERVER_API_URL}/tasks`, {
-            projectId: projectId,
-        }).then((res) => {
-            const tasksNew = res.data?.tasks;
+        fetch(`${SERVER_API_URL}/tasks`, {
+            method: "POST",
+            body: JSON.stringify({
+                projectId: projectId,
+            }),
+            headers: commonHeaders
+        }).then((res) => res.json()).then((res) => {
+            const tasksNew = res.tasks;
             setTasks(tasksNew);
         }).catch((e) => console.log(e));
-        setTasks(tasksExample);
+        //setTasks(tasksExample);
     }
 
     const updateTaskList = (tasks) => {
@@ -89,16 +92,22 @@ export default function Board(props) {
         if (!status || !taskId || !projectId) {
             return;
         }
-        axios.post(`${SERVER_API_URL}/task/transit`, {
-            taskId: taskId,
-            projectId: projectId,
-            status: status,
-        }).then((res) => {
-            if (res.data.status)
-                getTasks();
-            else
-                throw new Error(`Ошибка перевода статуса задачи:${res.data.message}`);
-        }).catch((e) => console.log(e));
+
+        fetch(`${SERVER_API_URL}/task/transit`, {
+            method: "POST",
+            body: JSON.stringify({
+                taskId: taskId,
+                projectId: projectId,
+                status: status,
+            }),
+            headers: commonHeaders
+        }).then((res) => res.json())
+            .then((res) => {
+                if (res.status)
+                    getTasks();
+                else
+                    throw new Error(`Ошибка перевода статуса задачи:${res.message}`);
+            }).catch((e) => console.log(e));
     }
 
     const handleDragEnd = (result) => {

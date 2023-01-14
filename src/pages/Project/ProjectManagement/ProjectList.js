@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import dateFormat, { masks } from "dateformat";
 import { getCookie } from '../../../util/libs/cookie';
 import axios from "axios"
-import { SERVER_API_URL } from "../../../util/config/constants"
+import { commonHeaders, SERVER_API_URL } from "../../../util/config/constants"
 
 
 export default function ProjectList(props) {
@@ -42,15 +42,19 @@ export default function ProjectList(props) {
     })
 
     const getAllProjects = () => {
-        setProjects(projectExample);
+        //setProjects(projectExample);
         if (!userLogin) {
             return;
         };
-        axios.post(
-            `${SERVER_API_URL}/projects`, {
-            userLogin: userLogin,
-        }).then((res) => {
-            const projectList = res.data?.projects;
+
+        fetch(`${SERVER_API_URL}/projects`, {
+            method: "POST",
+            body: JSON.stringify({
+                userLogin: userLogin,
+            }),
+            headers: commonHeaders
+        }).then((res) => res.json()).then((res) => {
+            const projectList = res?.projects;
             setProjects(projectList);
         }).catch((e) => console.log(e));
     };

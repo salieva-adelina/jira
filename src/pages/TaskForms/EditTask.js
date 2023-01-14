@@ -1,6 +1,6 @@
-import React, {useEffect, useState, useRef} from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import axios from "axios";
-import { SERVER_API_URL } from "../../util/config/constants"
+import { commonHeaders, SERVER_API_URL } from "../../util/config/constants"
 import Attachments from '../../components/attachments/Attachments'
 
 export default function EditTask(props) {
@@ -15,48 +15,55 @@ export default function EditTask(props) {
     const getProjectUsers = () => {
         //Если задача на тестирование, подгружаем только тестировщиков
         const isTesting = props.task.type === "Testing";
-        axios.post(
-            `${SERVER_API_URL}/projects/${isTesting ? "testers" : "users"}`,
-            {projectId: props.projectId})
-            .then((res)=>{
-                const users = res.data?.users ?? [];
-                setProjectUsers(users);})
-            .catch((e)=>console.log(e));
-        setProjectUsers(["User1", "User2"])
+
+        fetch(`${SERVER_API_URL}/projects/${isTesting ? "testers" : "users"}`, {
+            method: "POST",
+            body: JSON.stringify({
+                projectId: props.projectId
+            }),
+            headers: commonHeaders
+        }).then((res) => res.json()).then((res) => {
+            const users = res.users ?? [];
+            setProjectUsers(users);
+        }).catch((e) => console.log(e));
+        //setProjectUsers(["User1", "User2"])
     };
 
     //Updating Users onLoad:
-    useEffect(()=>{
+    useEffect(() => {
         getProjectUsers();
         setAttachments(props.task.attachments);
-    },[]);
+    }, []);
 
-    const handleSubmit = (e)=>{
+    const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post(`${SERVER_API_URL}/task/change`,{
-            taskId: props.task.id,
-            projectId: props.projectId,
-            status : props.task.status,
-            asignee: asigneeRef.current.value,
-            name: nameRef.current.value,
-            description: descriptionRef.current.value,
-            attachmentsOld: attachmentsOld,
-            attachmentsNew: attachmentsNewRef.current.value,
-        })
-            .then((res)=>{
-                if(res.data.status)
-                    props.setEditing(false);
-                else
-                    throw new Error(`Ошибка изменения задачи:${res.data.message}`);
-            })
-            .catch((e)=>console.log(e));
+
+        fetch(`${SERVER_API_URL}/task/change`, {
+            method: "POST",
+            body: JSON.stringify({
+                taskId: props.task.id,
+                projectId: props.projectId,
+                status: props.task.status,
+                asignee: asigneeRef.current.value,
+                name: nameRef.current.value,
+                description: descriptionRef.current.value,
+                attachmentsOld: attachmentsOld,
+                attachmentsNew: attachmentsNewRef.current.value,
+            }),
+            headers: commonHeaders
+        }).then((res) => res.json()).then((res) => {
+            if (res.status)
+                props.setEditing(false);
+            else
+                throw new Error(`Ошибка изменения задачи:${res.data.message}`);
+        }).catch((e) => console.log(e));
     }
 
     return (
         <div className="container" >
             <div className="row">
                 <div className="col-auto">
-                    <form method="POST" action={`${SERVER_API_URL}/task/change`}  onSubmit={(e)=>{handleSubmit(e); }}>
+                    <form method="POST" action={`${SERVER_API_URL}/task/change`} onSubmit={(e) => { handleSubmit(e); }}>
                         <div className="mb-3">
                             <label htmlFor="taskName" className="form-label">
                                 Название задачи
@@ -83,7 +90,7 @@ export default function EditTask(props) {
                                 ref={asigneeRef}
                             >
                                 <option selected key={props.task.asignee}>{props.task.asignee}</option>
-                                {projectUsers.map((user)=>
+                                {projectUsers.map((user) =>
                                     <option value={user} key={user}>{user}</option>
                                 )}
                             </select>
@@ -102,7 +109,7 @@ export default function EditTask(props) {
                             />
                         </div>
                         <div className="row">
-                            <Attachments attachments={attachmentsOld} setAttachments={setAttachments}/>
+                            <Attachments attachments={attachmentsOld} setAttachments={setAttachments} />
                         </div>
                         <div className="mb-3">
                             <input
@@ -114,10 +121,10 @@ export default function EditTask(props) {
                                 multiple
                             />
                         </div>
-                        <br/>
+                        <br />
                         <div className="row">
                             <div className="col-auto">
-                                <a className="btn btn-danger" onClick={()=>{
+                                <a className="btn btn-danger" onClick={() => {
                                     props.setEditing(false)
                                 }}>Отмена</a>
                             </div>

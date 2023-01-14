@@ -1,5 +1,5 @@
 import axios from "axios"
-import { SERVER_API_URL } from "../../util/config/constants"
+import { commonHeaders, SERVER_API_URL } from "../../util/config/constants"
 
 export const authService = {
     login: (userLogin) => {
@@ -16,6 +16,7 @@ export const authService = {
         return axios({
             url: `${SERVER_API_URL}/user/register`,
             method: 'POST',
+            headers: commonHeaders,
             data: userRegister,
         })
     }

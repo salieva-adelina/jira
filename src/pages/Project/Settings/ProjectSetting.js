@@ -1,13 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { useSelector, useDispatch, connect } from 'react-redux';
-import { GET_ALL_PROJECT_CATEGORY_SAGA } from '../../../redux/constants/ProjectCategoryConst';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
 import { CREATE_PROJECT_SAGA, DUPPLICATE_PROJECT_NAME } from '../../../redux/constants/ProjectConst';
 import Swal from 'sweetalert2'
-import axios from "axios";
-import {SERVER_API_URL} from "../../../util/config/constants";
+import { commonHeaders, SERVER_API_URL } from "../../../util/config/constants";
 
 function ProjectSetting(props) {
 
@@ -26,19 +24,20 @@ function ProjectSetting(props) {
     const [users, setUsers] = useState([]);
 
     const getAllUsers = () => {
-        axios.post(
-            `${SERVER_API_URL}/users`)
-            .then((res) => {
-                const users = res.data?.users ?? [];
-                setUsers(users);
-            }).catch((e)=>console.log(e));
-        setUsers(["User1", "User2"]);
+        fetch(`${SERVER_API_URL}/users`, {
+            method: "POST",
+            headers: commonHeaders
+        }).then((res) => res.json()).then((res) => {
+            const users = res?.users ?? [];
+            setUsers(users);
+        }).catch((e) => console.log(e));
+        //setUsers(["User1", "User2"]);
     };
 
     //Updating Users onLoad:
-    useEffect(()=>{
+    useEffect(() => {
         getAllUsers();
-    },[]);
+    }, []);
 
     useEffect(() => {
         if (props.dupplicateProjectName === 'true') {
@@ -88,7 +87,7 @@ function ProjectSetting(props) {
                         name="manager"
                         onChange={handleChange}
                     >
-                        {users.map((user)=>
+                        {users.map((user) =>
                             <option value={user} key={user}>{user}</option>
                         )}
                     </select>

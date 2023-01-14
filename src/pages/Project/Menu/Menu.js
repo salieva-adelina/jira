@@ -1,29 +1,30 @@
-import React, {useEffect, useState, useRef} from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import ReactLogo from '../../../logo.svg';
-import { SERVER_API_URL } from "../../../util/config/constants"
-import axios from "axios";
+import { commonHeaders, SERVER_API_URL } from "../../../util/config/constants"
 import { getCookie } from '../../../util/libs/cookie';
 
 export default function Menu(props) {
     const isRoot = getCookie('isRoot');
     const [isManager, setManager] = useState(false);
-    
+
     const getUserRoles = () => {
-        if(!props.projectId) return;
-        axios.post(
-            `${SERVER_API_URL}/user/roles/get`,
-            {
+        if (!props.projectId) return;
+
+        fetch(`${SERVER_API_URL}/user/roles/get`, {
+            method: "POST",
+            body: JSON.stringify({
                 projectId: props.projectId,
                 userLogin: props.userLogin,
-            }).then((res)=>{
-                const roles = res.data?.roles ?? [];
-                setManager(roles.includes('Руководитель проекта'));
-            }).catch((e)=>console.log(e));
-        setManager(true);
+            }),
+            headers: commonHeaders
+        }).then((res) => res.json()).then((res) => {
+            const roles = res.roles ?? [];
+            setManager(roles.includes('Руководитель проекта'));
+        }).catch((e) => console.log(e));
+        //setManager(true);
     };
-    
+
     useEffect(() => {
         getUserRoles();
     }, [])
@@ -47,25 +48,25 @@ export default function Menu(props) {
                             <span className="ml-2">Меню задач</span>
                         </div>
                     </NavLink>
-                    { isManager ?
-                    <NavLink to={`/project/${props.projectId}/users`} style={{ color: '#172B4D' }} activeClassName="active font-weight-bold text-primary">
-                        <div>
-                            <i className="fa fa-cog" />
-                            <span className="ml-2">Управление пользователями проекта</span>
-                        </div>
-                    </NavLink>
-                    : <div></div>
+                    {isManager ?
+                        <NavLink to={`/project/${props.projectId}/users`} style={{ color: '#172B4D' }} activeClassName="active font-weight-bold text-primary">
+                            <div>
+                                <i className="fa fa-cog" />
+                                <span className="ml-2">Управление пользователями проекта</span>
+                            </div>
+                        </NavLink>
+                        : <div></div>
                     }
-                    {isRoot ? 
-                    <NavLink to={`/project/${props.projectId}/settings`} style={{ color: '#172B4D' }} activeClassName="active font-weight-bold text-primary">
-                        <div>
-                            <i className="fa fa-cog" />
-                            <span className="ml-2">Настройки проекта</span>
-                        </div>
-                    </NavLink>
-                    :<div></div>
+                    {isRoot ?
+                        <NavLink to={`/project/${props.projectId}/settings`} style={{ color: '#172B4D' }} activeClassName="active font-weight-bold text-primary">
+                            <div>
+                                <i className="fa fa-cog" />
+                                <span className="ml-2">Настройки проекта</span>
+                            </div>
+                        </NavLink>
+                        : <div></div>
                     }
-                </div> :<div></div>
+                </div> : <div></div>
                 }
                 <NavLink to="/project-management" style={{ color: '#172B4D' }} activeClassName="active font-weight-bold text-primary">
                     <div>

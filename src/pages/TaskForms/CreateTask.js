@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { SERVER_API_URL } from "../../util/config/constants"
+import { commonHeaders, SERVER_API_URL } from "../../util/config/constants"
 import axios from 'axios'
 import { getCookie } from '../../util/libs/cookie';
 
@@ -24,76 +24,93 @@ export default function CreateTask(props) {
     const [link, setLink] = useState();
 
     //Updating Users onLoad:
-    useEffect(()=>{getProjectUsers()},[]);
+    useEffect(() => { getProjectUsers() }, []);
 
     const getProjectUsers = () => {
         //Если задача на тестирование, подгружаем только тестировщиков
         const isTesting = isTestingRef.current.value;
-        axios.post(
-            `${SERVER_API_URL}/projects/${isTesting ? "testers" : "users"}`,
-            {"projectId": projectId})
-            .then((res)=>{
-                const users = res.data?.users ?? [];
-                setProjectUsers(users);})
-            .catch((e)=>console.log(e));
+
+        fetch(`${SERVER_API_URL}/projects/${isTesting ? "testers" : "users"}`, {
+            method: "POST",
+            body: JSON.stringify({
+                "projectId": projectId
+            }),
+            headers: commonHeaders
+        }).then((res) => res.json()).then((res) => {
+            const users = res.users ?? [];
+            setProjectUsers(users);
+        }).catch((e) => console.log(e));
         //setProjectUsers(["User1", "User2"])
     };
 
     const getSuits = () => {
         const isTesting = isTestingRef.current.value;
-        if(!isTesting){
+        if (!isTesting) {
             setSuits([]);
             setCases([]);
             setRuns([]);
             return;
         }
 
-        axios.post(`${SERVER_API_URL}/projects/test/suites`,{"projectId": projectId})
-            .then((res)=>{
-                const suits = res.data?.suits ?? [];
-                setSuits(suits);})
-            .catch((e)=>console.log(e));
+        fetch(`${SERVER_API_URL}/projects/test/suites`, {
+            method: "POST",
+            body: JSON.stringify({
+                "projectId": projectId
+            }),
+            headers: commonHeaders
+        }).then((res) => res.json()).then((res) => {
+            const suits = res.suits ?? [];
+            setSuits(suits);
+        }).catch((e) => console.log(e));
         //setSuits(["1", "2"])
     };
 
-    const getCases = ()=>{
+    const getCases = () => {
         const suit = suitRef.current.value;
         const isTesting = isTestingRef.current.value;
 
-        if(!isTesting || !suit){
+        if (!isTesting || !suit) {
             setCases([]);
             setRuns([]);
             return;
         }
 
-        axios.post(`${SERVER_API_URL}/projects/test/cases`,{
-            projectId: projectId,
-            testSuit: suit
-        }).then((res)=>{
-            const cases = res.data?.cases ?? [];
+        fetch(`${SERVER_API_URL}/projects/test/cases`, {
+            method: "POST",
+            body: JSON.stringify({
+                projectId: projectId,
+                testSuit: suit
+            }),
+            headers: commonHeaders
+        }).then((res) => res.json()).then((res) => {
+            const cases = res.cases ?? [];
             setCases(cases);
-        }).catch((e)=>console.log(e));
+        }).catch((e) => console.log(e));
         //setCases(["1", "2"]);
     };
 
-    const getRuns = ()=>{
+    const getRuns = () => {
         const suit = suitRef.current.value;
         const Case = caseRef.current.value;
         const isTesting = isTestingRef.current.value;
 
-        if(!isTesting || !suit || !Case){
+        if (!isTesting || !suit || !Case) {
             setRuns([]);
             return;
         }
 
-        axios.post(`${SERVER_API_URL}/projects/test/runs`,{
-            projectId: projectId,
-            testSuit: suit,
-            testCase: Case
-        }).then((res)=>{
-            const runs = res.data?.runs ?? [];
+        fetch(`${SERVER_API_URL}/projects/test/runs`, {
+            method: "POST",
+            body: JSON.stringify({
+                projectId: projectId,
+                testSuit: suit,
+                testCase: Case
+            }),
+            headers: commonHeaders
+        }).then((res) => res.json()).then((res) => {
+            const runs = res.runs ?? [];
             setRuns(runs);
-        }).catch((e)=>console.log(e));
+        }).catch((e) => console.log(e));
         //setRuns(["1", "2"]);
     };
 
@@ -103,49 +120,57 @@ export default function CreateTask(props) {
         const run = runRef.current.value;
         const isTesting = isTestingRef.current.value;
 
-        if(!isTesting || !suit || !Case || !run){
+        if (!isTesting || !suit || !Case || !run) {
             setLink(undefined);
             return;
         }
 
-        axios.post(`${SERVER_API_URL}/projects/test/generate`,{
-            projectId: projectId,
-            testSuit: suit,
-            testRun: run,
-            testCase: Case
-        }).then((res)=>{
-            const url = res.data?.url ?? "";
+        fetch(`${SERVER_API_URL}/projects/test/generate`, {
+            method: "POST",
+            body: JSON.stringify({
+                projectId: projectId,
+                testSuit: suit,
+                testRun: run,
+                testCase: Case
+            }),
+            headers: commonHeaders
+        }).then((res) => res.json()).then((res) => {
+            const url = res.url ?? "";
             setLink(url);
         }).catch((e) => console.log(e));
     };
 
-    const handleSubmit = (e)=>{
+    const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post(`${SERVER_API_URL}/task/change`,{
-            isTesting: Boolean(isTestingRef.current.value),
-            projectId: projectId,
-            author: user,
-            asignee: asigneeRef.current.value,
-            name: nameRef.current.value,
-            description: descriptionRef.current.value,
-            link: link,
-            attachments: attachmentsRef.current.value,
-        }).then((res)=>{
-            if(res.data.status)
+        fetch(`${SERVER_API_URL}/task/change`, {
+            method: "POST",
+            body: JSON.stringify({
+                isTesting: Boolean(isTestingRef.current.value),
+                projectId: projectId,
+                author: user,
+                asignee: asigneeRef.current.value,
+                name: nameRef.current.value,
+                description: descriptionRef.current.value,
+                link: link,
+                attachments: attachmentsRef.current.value,
+            }),
+            headers: commonHeaders
+        }).then((res) => res.json()).then((res) => {
+            if (res.status)
                 props.setEditing(false);
             else
-                throw new Error(`Ошибка изменения задачи:${res.data.message}`);
-        }).catch((e)=>console.log(e));
+                throw new Error(`Ошибка изменения задачи:${res.message}`);
+        }).catch((e) => console.log(e));
     }
 
     return (
         <div className="container">
             <div className="row">
                 <div className="col-auto">
-                    <form method="POST" action={`${SERVER_API_URL}/task/create`} onSubmit={(e)=>{handleSubmit(e); }}>
+                    <form method="POST" action={`${SERVER_API_URL}/task/create`} onSubmit={(e) => { handleSubmit(e); }}>
                         <div className="mb-3">
                             <label htmlFor="taskName" className="form-label">Название задачи</label>
-                            <input type="text" className="form-control" ref={nameRef} placeholder="Введите название" name="name"/>
+                            <input type="text" className="form-control" ref={nameRef} placeholder="Введите название" name="name" />
                         </div>
                         <div className="form-check">
                             <input
@@ -158,20 +183,20 @@ export default function CreateTask(props) {
                                 aria-expanded="false"
                                 aria-controls="suits"
                                 ref={isTestingRef}
-                                onChange={()=>{
+                                onChange={() => {
                                     getProjectUsers();
                                     getSuits();
                                 }}
                             />
                             <label className="form-check-label" htmlFor="isTesting">Задача на тестирование</label>
                         </div>
-                        <p/>
+                        <p />
                         <div className="mb-3">
                             <label htmlFor="asignee" className="form-label">
                                 Выбор исполнителя
                             </label>
                             <select className="form-select" ref={asigneeRef} aria-label="Default select example" name="asignee">
-                                {projectUsers.map((user)=>
+                                {projectUsers.map((user) =>
                                     <option value={user} key={user}>{user}</option>
                                 )}
                             </select>
@@ -179,25 +204,25 @@ export default function CreateTask(props) {
                         <div className="collapse" id="suits">
                             <label>Параметры для тестирования</label>
                             <div className="mb-3">
-                                <select className="form-select" aria-label="Suits" ref={suitRef} onChange={()=>{getCases();}}>
+                                <select className="form-select" aria-label="Suits" ref={suitRef} onChange={() => { getCases(); }}>
                                     <option value="">Выберите suit</option>
-                                    { suits.map((suit)=>
+                                    {suits.map((suit) =>
                                         <option value={suit} key={suit}>{suit}</option>
                                     )}
                                 </select>
                             </div>
                             <div className="mb-3">
-                                <select className="form-select" aria-label="Cases" ref={caseRef} onChange={()=>{getRuns();}}>
+                                <select className="form-select" aria-label="Cases" ref={caseRef} onChange={() => { getRuns(); }}>
                                     <option value="">Выберите case</option>
-                                    { cases.map((Case)=>
+                                    {cases.map((Case) =>
                                         <option value={Case} key={Case}>{Case}</option>
                                     )}
                                 </select>
                             </div>
                             <div className="mb-3">
-                                <select className="form-select" aria-label="Runs" ref={runRef} onChange={()=>{getTestLink();}}>
+                                <select className="form-select" aria-label="Runs" ref={runRef} onChange={() => { getTestLink(); }}>
                                     <option value="">Выберите run</option>
-                                    { runs.map((run)=>
+                                    {runs.map((run) =>
                                         <option value={run} key={run}>{run}</option>
                                     )}
                                 </select>

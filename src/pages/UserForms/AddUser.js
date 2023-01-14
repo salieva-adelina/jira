@@ -1,6 +1,6 @@
-import React, {useEffect, useState, useRef} from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import axios from "axios";
-import { SERVER_API_URL } from "../../util/config/constants"
+import { SERVER_API_URL, commonHeaders } from "../../util/config/constants"
 
 /**
  * Страница встроена в ProjectUsers. Добавлять никуда больше не требуется.
@@ -13,42 +13,46 @@ const AddUser = (props) => {
     const userRef = useRef();
 
     const getAllUsers = () => {
-        axios.post(
-            `${SERVER_API_URL}/users`)
-            .then((res)=>{
-                const users = res.data?.users ?? [];
-                setUsers(
-                    users.filter((user)=>
-                        !props.projectUsers?.includes(user)
-                    )
+        fetch(`${SERVER_API_URL}/users`, {
+            method: "POST",
+            headers: commonHeaders
+        }).then((res) => res.json()).then((res) => {
+            const users = res.users ?? [];
+            setUsers(
+                users.filter((user) =>
+                    !props.projectUsers?.includes(user)
                 )
-            }).catch((e)=>console.log(e));
-        setUsers(["User1", "User2"]);
+            )
+        }).catch((e) => console.log(e));
+        //setUsers(["User1", "User2"]);
     };
 
     const addUser = () => {
         const user = userRef.current.value;
-        if(!user) return;
+        if (!user) return;
 
         axios.post(
-            `${SERVER_API_URL}/user/attach`,{
+            `${SERVER_API_URL}/user/attach`,
+            JSON.stringify({
                 projectId: props.projectId,
                 userLogin: user,
-            }).then((res)=>{
-                const status = res.data?.status ?? [];
-                if(status) {
-                    setUsers(nonProjectUsers.filter((item)=>item!==user));
-                } else {
-                    throw new Error(`Ошибка добавления пользователя на проект:${res.data.message}`);
-                }
-            }).catch((e)=>console.log(e));
-        setUsers(["User1", "User2"]);
+            }),
+            commonHeaders
+        ).then((res) => {
+            const status = res.data?.status ?? [];
+            if (status) {
+                setUsers(nonProjectUsers.filter((item) => item !== user));
+            } else {
+                throw new Error(`Ошибка добавления пользователя на проект:${res.data.message}`);
+            }
+        }).catch((e) => console.log(e));
+        //setUsers(["User1", "User2"]);
     };
 
     //Updating Users onLoad:
-    useEffect(()=>{
+    useEffect(() => {
         getAllUsers();
-    },[]);
+    }, []);
 
     return (
         <div className="row">
@@ -60,7 +64,7 @@ const AddUser = (props) => {
                             Выберите пользователя из списка
                         </label>
                         <select className="form-select" ref={userRef} aria-label="Adding user to project" name="user">
-                            {nonProjectUsers.map((user)=>
+                            {nonProjectUsers.map((user) =>
                                 <option value={user} key={user}>{user}</option>
                             )}
                         </select>
@@ -68,7 +72,7 @@ const AddUser = (props) => {
                     <div className="card-footer">
                         <div className="row">
                             <div className="col d-flex align-items-center justify-content-center">
-                                <a className="btn btn-outline-danger" onClick={()=>props.setIsAdding(false)}>Вернуться</a>
+                                <a className="btn btn-outline-danger" onClick={() => props.setIsAdding(false)}>Вернуться</a>
                             </div>
                             <div className="col d-flex align-items-center justify-content-center">
                                 <a className="btn btn-outline-success" onClick={addUser}>Добавить</a>

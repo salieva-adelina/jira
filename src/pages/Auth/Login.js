@@ -5,10 +5,8 @@ import { NavLink } from 'react-router-dom';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
 import { connect } from 'react-redux';
-import { loginAction } from '../../redux/actions/AuthAction/LoginAction';
 import { deleteCookie, setCookie } from '../../util/libs/cookie';
-import axios from "axios"
-import { SERVER_API_URL } from "../../util/config/constants"
+import { commonHeaders, SERVER_API_URL } from "../../util/config/constants"
 
 function Login(props) {
 
@@ -62,28 +60,25 @@ const LoginWithFormik = withFormik({
     handleSubmit: (values, { setSubmitting, props }) => {
         let { username, password } = values;
         setSubmitting(false);
+        fetch(`${SERVER_API_URL}/user/login`, {
+            method: "POST",
+            body: JSON.stringify({
+                username: username,
+                password: password,
+            }),
+            headers: commonHeaders
+        }).then((res) => res.json())
+            .then((res) => {
+                const status = res.status;
+                if (status) {
+                    setCookie('login', username);
+                    setCookie('isRoot', res.isRoot);
 
-        axios.post(
-            `${SERVER_API_URL}/user/login`, {
-            username: username,
-            password: password,
-        }).then((res) => {
-            const status = res.data?.status;
-            if (status) {
-                setCookie('login', username);
-                setCookie('isRoot', res.data?.isRoot);
-
-            } else {
-                deleteCookie('isRoot');
-                deleteCookie('login');
-            }
-        }).catch((e) => {
-            console.log(e);
-            //Заглушка
-            setCookie('login', username);
-            setCookie('isRoot', true);
-        });
-
+                } else {
+                    deleteCookie('isRoot');
+                    deleteCookie('login');
+                }
+            }).catch((e) => console.log(e));
     },
 
     displayName: 'УПиЗ',

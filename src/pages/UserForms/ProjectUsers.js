@@ -1,7 +1,7 @@
-import React, {useEffect, useState, useRef} from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import axios from "axios";
 import AddUser from "./AddUser";
-import { SERVER_API_URL } from "../../util/config/constants"
+import { SERVER_API_URL, commonHeaders } from "../../util/config/constants"
 
 const availableRoles = ['Тестировщик', "Руководитель тестирования"];
 
@@ -13,76 +13,82 @@ const ProjectUsers = (props) => {
     const [isAdding, setIsAdding] = useState(false);
 
     const getProjectUsers = () => {
-        if(!projectId) return;
+        if (!projectId) return;
 
         axios.post(
             `${SERVER_API_URL}/projects/users`,
-            {projectId: projectId})
-            .then((res)=>{
-                const users = res.data?.users ?? [];
-                setProjectUsers(users);})
-            .catch((e)=>console.log(e));
-        setProjectUsers(["User1", "User2"])
+            JSON.stringify({ projectId: projectId }),
+            commonHeaders
+        ).then((res) => {
+            const users = res.data?.users ?? [];
+            setProjectUsers(users);
+        }).catch((e) => console.log(e));
+        //setProjectUsers(["User1", "User2"])
     };
 
     const getUserRoles = () => {
-        if(!projectId || !selectedUser) return;
+        if (!projectId || !selectedUser) return;
         axios.post(
             `${SERVER_API_URL}/user/roles/get`,
-            {
+            JSON.stringify({
                 projectId: projectId,
                 userLogin: selectedUser,
-            }).then((res)=>{
-                const roles = res.data?.roles ?? [];
-                setUserRoles(roles);
-            }).catch((e)=>console.log(e));
-        setUserRoles(availableRoles);
+            }),
+            commonHeaders
+        ).then((res) => {
+            const roles = res.data?.roles ?? [];
+            setUserRoles(roles);
+        }).catch((e) => console.log(e));
+        //setUserRoles(availableRoles);
     };
 
     const changeUserRoles = () => {
-        if(!projectId || !selectedUser) return;
+        if (!projectId || !selectedUser) return;
         axios.post(
             `${SERVER_API_URL}/user/roles/change`,
-            {
+            JSON.stringify({
                 projectId: projectId,
                 userLogin: selectedUser,
                 roles: userRoles ?? [],
-            }).then((res)=>{
-
+            }),
+            commonHeaders
+        ).then((res) => {
             const status = res.data?.status;
-            if(!status){
+            if (!status) {
                 throw new Error(`Ошибка изменения ролей пользователя:${res.data.message}`);
             }
-        }).catch((e)=>console.log(e));
+        }).catch((e) => console.log(e));
     };
 
     const deleteUser = () => {
-        if(!projectId || !selectedUser) return;
+        if (!projectId || !selectedUser) return;
         axios.post(
             `${SERVER_API_URL}/user/detach`,
-            {
+            JSON.stringify({
                 projectId: projectId,
                 userLogin: selectedUser,
-            }).then((res)=>{
-                const status = res.data?.status;
-                if(status) {
-                    setProjectUsers(projectUsers.filter((user)=>user!==selectedUser));
-                    selectUser(undefined);
-                } else {
-                    throw new Error(`Ошибка удаления пользователя с проекта:${res.data.message}`);
-                }
-            }).catch((e)=>console.log(e));
+            }),
+            commonHeaders
+        ).then((res) => {
+            const status = res.data?.status;
+            if (status) {
+                setProjectUsers(projectUsers.filter((user) => user !== selectedUser));
+                selectUser(undefined);
+            } else {
+                throw new Error(`Ошибка удаления пользователя с проекта:${res.data.message}`);
+            }
+        }).catch((e) => console.log(e));
     };
 
     //Updating Users onLoad:
-    useEffect(()=>{
+    useEffect(() => {
         getProjectUsers();
-    },[]);
+    }, []);
 
     //Update roles on user choose
-    useEffect(()=>{
+    useEffect(() => {
         getUserRoles();
-    },[selectedUser]);
+    }, [selectedUser]);
 
     return (
         <div className="container">
@@ -96,7 +102,7 @@ const ProjectUsers = (props) => {
                             <button
                                 type="button"
                                 className="btn btn-success"
-                                onClick={()=>setIsAdding(true)}
+                                onClick={() => setIsAdding(true)}
                             >
                                 Добавить пользователя
                             </button>
@@ -107,8 +113,8 @@ const ProjectUsers = (props) => {
                             <div className="card" id="selectedUser">
                                 <div className="card-body">
                                     {
-                                        projectUsers.map((user)=>
-                                            <div className="form-check" key={user} onClick={()=>{selectUser(user)}}>
+                                        projectUsers.map((user) =>
+                                            <div className="form-check" key={user} onClick={() => { selectUser(user) }}>
                                                 <input
                                                     className="form-check-input"
                                                     type="radio"
@@ -126,15 +132,15 @@ const ProjectUsers = (props) => {
                         <div className="col">
                             <div className="card" id="roles">
                                 <div className="card-body">
-                                    {availableRoles.map((role)=>
+                                    {availableRoles.map((role) =>
                                         <div
                                             className="form-check"
                                             key={role}
-                                            onClick={()=>{
-                                                if(userRoles.includes(role)){
-                                                    setUserRoles(userRoles.filter((item)=>role!==item))
+                                            onClick={() => {
+                                                if (userRoles.includes(role)) {
+                                                    setUserRoles(userRoles.filter((item) => role !== item))
                                                 } else {
-                                                    setUserRoles([...userRoles,role])
+                                                    setUserRoles([...userRoles, role])
                                                 }
                                             }}>
                                             <input
