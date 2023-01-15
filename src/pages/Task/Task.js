@@ -60,10 +60,7 @@ export default function Task(props) {
             commonHeaders
         ).then((res) => {
             if (res.data.status) {
-                setTask({
-                    ...task,
-                    status: status
-                });
+                getTask();
             }
         }).catch((e) => console.log(e));
     }
