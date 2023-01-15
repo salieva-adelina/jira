@@ -149,7 +149,10 @@ const CreateProjectWithFormik = withFormik({
                 ...values,
             }),
             commonHeaders
-        ).catch((e) => console.log(e))
+        ).then((res)=>{
+            if(res.data?.status) props.history.goBack();
+        }).catch((e) => console.log(e))
+        
     },
 
     displayName: 'УПиЗ',
