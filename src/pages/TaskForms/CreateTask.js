@@ -125,7 +125,7 @@ export default function CreateTask(props) {
             }),
             commonHeaders
         ).then((res) => {
-            const url = res.url ?? "";
+            const url = res.data?.link ?? "";
             setLink(url);
         }).catch((e) => console.log(e));
     };
