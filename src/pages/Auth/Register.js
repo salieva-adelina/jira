@@ -71,7 +71,7 @@ const RegisterWithFormik = withFormik({
         let { username, password } = values;
         setSubmitting(false);
         axios.post(
-            `${SERVER_API_URL}/projects/create`,
+            `${SERVER_API_URL}/user/register`,
             JSON.stringify({
                 login: username,
                 password: password,
