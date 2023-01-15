@@ -141,7 +141,7 @@ export default function CreateTask(props) {
                 name: nameRef.current.value,
                 description: descriptionRef.current.value,
                 link: link,
-                attachments: attachmentsRef.current.value,
+                attachments: [attachmentsRef.current.value],
             }),
             commonHeaders
         ).then((res) => {
