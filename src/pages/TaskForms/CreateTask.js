@@ -6,7 +6,7 @@ import { getCookie } from '../../util/libs/cookie';
 export default function CreateTask(props) {
     const projectId = Number(props.match.params.id);
     const user = getCookie('login');
-    const isTestingRef = useRef();
+    const [isTesting, setTesting] = useState(false);
     const suitRef = useRef();
     const caseRef = useRef();
     const runRef = useRef();
@@ -26,9 +26,8 @@ export default function CreateTask(props) {
     //Updating Users onLoad:
     useEffect(() => { getProjectUsers() }, []);
 
-    const getProjectUsers = () => {
+    const getProjectUsers = (isTesting) => {
         //Если задача на тестирование, подгружаем только тестировщиков
-        const isTesting = isTestingRef.current.value;
 
         axios.post(`${SERVER_API_URL}/projects/${isTesting ? "testers" : "users"}`,
             JSON.stringify({
@@ -42,8 +41,7 @@ export default function CreateTask(props) {
         //setProjectUsers(["User1", "User2"])
     };
 
-    const getSuits = () => {
-        const isTesting = isTestingRef.current.value;
+    const getSuits = (isTesting) => {
         if (!isTesting) {
             setSuits([]);
             setCases([]);
@@ -65,7 +63,6 @@ export default function CreateTask(props) {
 
     const getCases = () => {
         const suit = suitRef.current.value;
-        const isTesting = isTestingRef.current.value;
 
         if (!isTesting || !suit) {
             setCases([]);
@@ -89,7 +86,6 @@ export default function CreateTask(props) {
     const getRuns = () => {
         const suit = suitRef.current.value;
         const Case = caseRef.current.value;
-        const isTesting = isTestingRef.current.value;
 
         if (!isTesting || !suit || !Case) {
             setRuns([]);
@@ -114,7 +110,6 @@ export default function CreateTask(props) {
         const suit = suitRef.current.value;
         const Case = caseRef.current.value;
         const run = runRef.current.value;
-        const isTesting = isTestingRef.current.value;
 
         if (!isTesting || !suit || !Case || !run) {
             setLink(undefined);
@@ -139,7 +134,7 @@ export default function CreateTask(props) {
         e.preventDefault();
         axios.post(`${SERVER_API_URL}/task/create`,
             JSON.stringify({
-                isTesting: Boolean(isTestingRef.current.value),
+                isTesting: isTesting,
                 projectId: projectId,
                 author: user,
                 asignee: asigneeRef.current.value,
@@ -156,6 +151,13 @@ export default function CreateTask(props) {
                 throw new Error(`Ошибка изменения задачи:${res.data?.message}`);
         }).catch((e) => console.log(e));
     }
+
+    const handleIsTestingChange = () => {
+        const newTesting = !isTesting;
+        setTesting(newTesting);
+        getProjectUsers(newTesting);
+        getSuits(newTesting);
+    };
 
     return (
         <div className="container">
@@ -176,11 +178,8 @@ export default function CreateTask(props) {
                                 data-bs-target="#suits"
                                 aria-expanded="false"
                                 aria-controls="suits"
-                                ref={isTestingRef}
-                                onChange={() => {
-                                    getProjectUsers();
-                                    getSuits();
-                                }}
+                                defaultChecked={false}
+                                onChange={handleIsTestingChange}
                             />
                             <label className="form-check-label" htmlFor="isTesting">Задача на тестирование</label>
                         </div>

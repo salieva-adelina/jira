@@ -6,7 +6,7 @@ import { SERVER_API_URL, commonHeaders } from "../../util/config/constants"
 const availableRoles = ['Тестировщик', "Руководитель тестирования"];
 
 const ProjectUsers = (props) => {
-    const projectId = props.match.params.id;
+    const projectId = Number(props.match.params.id);
     const [projectUsers, setProjectUsers] = useState([]);
     const [selectedUser, selectUser] = useState(undefined);
     const [userRoles, setUserRoles] = useState([]);
