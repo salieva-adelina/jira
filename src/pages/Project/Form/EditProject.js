@@ -74,7 +74,7 @@ function EditProject(props) {
             <div style={{ width: '60%' }} className="mt-4">
                 <div className="mb-4">
                     <label className="form-label">Название</label>
-                    <input className="form-control" name="name" placeholder="Название задачи" required="required" onChange={handleChange} />
+                    <input className="form-control" name="name" placeholder="Название проекта" required="required" onChange={handleChange} />
                 </div>
                 <div className="form-check">
                     <input
