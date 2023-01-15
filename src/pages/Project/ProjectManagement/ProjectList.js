@@ -10,8 +10,8 @@ import { commonHeaders, SERVER_API_URL } from "../../../util/config/constants"
 
 
 export default function ProjectList(props) {
-    const isRoot = getCookie('isRoot');
     const userLogin = getCookie('login');
+    const rootCookie = getCookie('isRoot') === 'true';
 
     const projectExample = [{
         id: "31231241",
@@ -33,6 +33,7 @@ export default function ProjectList(props) {
 
     const usersSearched = useSelector(state => state.UserReducer.usersSearched);
     const [usernameSearch, setUsernameSearch] = useState('');
+    const [isRoot, setRoot] = useState(false);
 
     let dataConvert = projects?.map((item, index) => {
         return {
@@ -60,6 +61,7 @@ export default function ProjectList(props) {
 
     useEffect(() => {
         getAllProjects();
+        setRoot(rootCookie);
         return () => {
         }
     }, [])

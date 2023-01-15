@@ -18,7 +18,7 @@ export default function EditTask(props) {
 
         axios.post(`${SERVER_API_URL}/projects/${isTesting ? "testers" : "users"}`,
             JSON.stringify({
-                projectId: props.projectId
+                projectId: Number(props.projectId)
             }),
             commonHeaders
         ).then((res) => {
@@ -39,8 +39,8 @@ export default function EditTask(props) {
 
         axios.post(`${SERVER_API_URL}/task/change`,
             JSON.stringify({
-                taskId: props.task.id,
-                projectId: props.projectId,
+                taskId: Number(props.task.id),
+                projectId: Number(props.projectId),
                 status: props.task.status,
                 asignee: asigneeRef.current.value,
                 name: nameRef.current.value,

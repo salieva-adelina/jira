@@ -6,7 +6,7 @@ import { commonHeaders, SERVER_API_URL } from "../../../util/config/constants"
 import { getCookie } from '../../../util/libs/cookie';
 
 export default function Menu(props) {
-    const isRoot = getCookie('isRoot');
+    const isRoot = getCookie('isRoot') === 'true';
     const userLogin = getCookie('login');
     const [isManager, setManager] = useState(false);
 
@@ -15,7 +15,7 @@ export default function Menu(props) {
 
         axios.post(`${SERVER_API_URL}/user/roles/get`,
             JSON.stringify({
-                projectId: props.projectId,
+                projectId: Number(props.projectId),
                 userLogin: userLogin,
             }),
             commonHeaders

@@ -19,8 +19,8 @@ const taskExample = {
     ]
 };
 export default function Task(props) {
-    const projectId = props.match.params.id;
-    const taskId = props.match.params.taskId;
+    const projectId = Number(props.match.params.id);
+    const taskId = Number(props.match.params.taskId);
 
     const [isEditing, setEditing] = useState(false);
     const [task, setTask] = useState({});

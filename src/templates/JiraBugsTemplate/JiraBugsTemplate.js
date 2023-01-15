@@ -10,7 +10,7 @@ export const JiraBugsTemplate = (props) => {
     const { Component, ...restParam } = props;
     const { project } = useSelector(state => state.ProjectReducer)
     const id = props.computedMatch.params.id;
-    const isRoot = getCookie('isRoot') ?? false;
+    const isRoot = getCookie('isRoot') === 'true';
     return <Route path={restParam.path} render={(propsRoute) => {
         return <>
             <div className="jira">

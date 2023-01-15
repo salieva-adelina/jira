@@ -23,7 +23,7 @@ export default function Board(props) {
             'status': 'Ожидает тестирования'
         }
     ];
-    const projectId = props.match.params.id;
+    const projectId = Number(props.match.params.id);
     const [tasks, setTasks] = useState([]);
     const [taksList, setTaskList] = useState([]);
 

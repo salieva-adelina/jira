@@ -4,7 +4,7 @@ import axios from 'axios'
 import { getCookie } from '../../util/libs/cookie';
 
 export default function CreateTask(props) {
-    const projectId = props.match.params.id;
+    const projectId = Number(props.match.params.id);
     const user = getCookie('login');
     const isTestingRef = useRef();
     const suitRef = useRef();

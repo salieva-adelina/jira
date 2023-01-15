@@ -32,7 +32,7 @@ const AddUser = (props) => {
         axios.post(
             `${SERVER_API_URL}/user/attach`,
             JSON.stringify({
-                projectId: props.projectId,
+                projectId: Number(props.projectId),
                 userLogin: user,
             }),
             commonHeaders

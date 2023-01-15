@@ -9,7 +9,6 @@ import axios from "axios";
 import { SERVER_API_URL } from "../../../util/config/constants";
 
 function EditProject(props) {
-    const projectId = props.match.params.id;
     const {
         // errors,
         handleChange,
@@ -145,7 +144,7 @@ const CreateProjectWithFormik = withFormik({
     enableReinitialize: true,
     mapPropsToValues: (props) => {
         return {
-            id: props.match?.params?.id,
+            id: Number(props.match?.params?.id),
             name: '',
             manager: '',
             description: '',
