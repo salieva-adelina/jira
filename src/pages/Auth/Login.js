@@ -73,7 +73,7 @@ const LoginWithFormik = withFormik({
             if (status) {
                 setCookie('login', username);
                 setCookie('isRoot', res.data.isRoot);
-
+                props.history.push('/project-management');
             } else {
                 deleteCookie('isRoot');
                 deleteCookie('login');

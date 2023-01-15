@@ -77,7 +77,11 @@ const RegisterWithFormik = withFormik({
                 password: password,
             }),
             commonHeaders
-        ).catch((e) => console.log(e))
+        ).then(res=>{
+            if(res.data.status){
+                props.history.push('/login');
+            }
+        }).catch((e) => console.log(e))
     },
 
     displayName: 'Jira Bugs Register',
