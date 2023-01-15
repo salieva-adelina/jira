@@ -46,7 +46,7 @@ export default function EditTask(props) {
                 name: nameRef.current.value,
                 description: descriptionRef.current.value,
                 attachmentsOld: attachmentsOld,
-                attachmentsNew: attachmentsNewRef.current.value,
+                attachmentsNew: [attachmentsNewRef.current.value],
             }),
             commonHeaders
         ).then((res) => {
