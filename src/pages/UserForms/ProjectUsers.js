@@ -92,7 +92,7 @@ const ProjectUsers = (props) => {
 
     return (
         <div className="container">
-            {isAdding ? <AddUser projectId={projectId} setIsAdding={setIsAdding} /> :
+            {isAdding ? <AddUser projectUsers={projectUsers} projectId={projectId} setIsAdding={setIsAdding} /> :
                 <div>
                     <div className="row">
                         <div className="col-auto">
