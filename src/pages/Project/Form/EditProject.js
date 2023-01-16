@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { CREATE_PROJECT_SAGA, DUPPLICATE_PROJECT_NAME } from '../../../redux/constants/ProjectConst';
 import Swal from 'sweetalert2'
 import axios from "axios";
-import { SERVER_API_URL } from "../../../util/config/constants";
+import { SERVER_API_URL, commonHeaders } from "../../../util/config/constants";
 
 function EditProject(props) {
     const {
@@ -160,8 +160,10 @@ const CreateProjectWithFormik = withFormik({
             `${SERVER_API_URL}/projects/change`,
             JSON.stringify({
                 ...values,
-            })
-        ).catch((e) => console.log(e));
+            }),
+            commonHeaders
+        ).then((res) => props.history.goBack())
+            .catch((e) => console.log(e));
     },
 
     displayName: 'УПиЗ',
